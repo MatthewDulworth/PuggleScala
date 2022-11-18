@@ -1,7 +1,5 @@
 package puggle
 
-import TokenType.*
-
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.io.StdIn.readLine
@@ -58,10 +56,9 @@ object Puggle {
    * @param src Source code to run.
    */
   private def run(src: String): Unit =
-    println(src)
-    scan(src) match
-      case Left(s) => println(s)
-      case Right(x) => x.print()
-
-  private def scan(src: String): Either[List[Token], Error] = ???
+    println("Source:")
+    println("'" + src + "'")
+    val tokens = Scanner(src).scan()
+    println(tokens)
+    Error.reportInvalidTokens(tokens)
 }
