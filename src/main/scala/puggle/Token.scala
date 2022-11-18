@@ -1,0 +1,5 @@
+package puggle
+
+class Token {
+
+}
