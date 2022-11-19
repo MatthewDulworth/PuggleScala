@@ -1,6 +1,1 @@
-sit x = (2 + 3.4);
-stay y = fetch() + x
-
-if (y > 2) {
-    bark("woof!")
-}
+// check if y > 2

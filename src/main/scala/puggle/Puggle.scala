@@ -60,5 +60,5 @@ object Puggle {
     println("'" + src + "'")
     val tokens = Scanner(src).scan()
     println(tokens)
-    Error.reportInvalidTokens(tokens)
+//    Error.reportInvalidTokens(tokens)
 }
