@@ -101,7 +101,7 @@ class Scanner(src: String) {
   /**
    * @return A string token starting at cursor.
    */
-  private def string(): StringLiteral =
+  private def string(): STRING =
     val begin = cursor
     val begin_line = line
 
@@ -117,29 +117,29 @@ class Scanner(src: String) {
     if cursor == src.length then
       Error.report(UnterminatedString(begin_line))
 
-    StringLiteral(src.substring(begin + 1, cursor))
+    STRING(src.substring(begin + 1, cursor))
 
   /**
    * @return A number token starting at cursor
    */
-  private def number(): NumberLiteral =
+  private def number(): NUMBER =
     val begin = cursor
     while peekNext.isDigit do nextChar()
     if peekNext == '.' && peekOver.isDigit then
       nextChar()
       while peekNext.isDigit do nextChar()
 
-    NumberLiteral(src.substring(begin, cursor + 1).toDouble)
+    NUMBER(src.substring(begin, cursor + 1).toDouble)
 
   /**
    * @return A UserIdentifier or Keyword starting at
    */
-  private def identifier(): Identifier =
+  private def identifier(): Id =
     val begin = cursor
     while peekNext.isLetterOrDigit do nextChar()
 
     val name = src.substring(begin, cursor + 1)
     keywords(name) match
       case Some(keyword) => keyword
-      case None => UserIdentifier(name)
+      case None => IDENTIFIER(name)
 }

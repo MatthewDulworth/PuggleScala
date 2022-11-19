@@ -3,13 +3,14 @@ package puggle
 
 sealed trait Token
 case object EOF extends Token
+
 // ----------------------------------------
 // Identifiers
 // ----------------------------------------
-sealed trait Identifier extends Token
-case class UserIdentifier(lexeme: String) extends Identifier
+sealed trait Id extends Token
+case class IDENTIFIER(lexeme: String) extends Id
 
-sealed trait Keyword extends Identifier
+sealed trait Keyword extends Id
 case object AND extends Keyword with Operator
 case object OR extends Keyword with Operator
 
@@ -48,8 +49,8 @@ case object SEMICOLON extends Token
 // ----------------------------------------
 sealed trait Literal extends Token
 
-case class StringLiteral(value: String) extends Literal
-case class NumberLiteral(value: Double) extends Literal
+case class STRING(value: String) extends Literal
+case class NUMBER(value: Double) extends Literal
 
 // ----------------------------------------
 // Operators

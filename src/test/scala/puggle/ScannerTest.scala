@@ -29,24 +29,24 @@ class ScannerTest extends AnyFunSuite {
   // String Literal Tests
   // ----------------------------------------
   test("Single string") {
-    testScanner("\"hello\"", StringLiteral("hello") :: Nil)
+    testScanner("\"hello\"", STRING("hello") :: Nil)
   }
 
   test("String and more") {
-    testScanner("\"hello\" + -", StringLiteral("hello") :: PLUS :: MINUS :: Nil)
+    testScanner("\"hello\" + -", STRING("hello") :: PLUS :: MINUS :: Nil)
   }
 
   test("unterminated string") {
-    testScanner("\"hello", StringLiteral("hello") :: Nil)
+    testScanner("\"hello", STRING("hello") :: Nil)
     testErrors(UnterminatedString(0))
   }
 
   test("multi-line string") {
-    testScanner("\"hello\ngoodbye\"", StringLiteral("hello\ngoodbye") :: Nil)
+    testScanner("\"hello\ngoodbye\"", STRING("hello\ngoodbye") :: Nil)
   }
 
   test("multi-line unterminated string") {
-    testScanner("\"hello\ngoodbye", StringLiteral("hello\ngoodbye") :: Nil)
+    testScanner("\"hello\ngoodbye", STRING("hello\ngoodbye") :: Nil)
     testErrors(UnterminatedString(0))
   }
 
@@ -54,24 +54,24 @@ class ScannerTest extends AnyFunSuite {
   // Number Literal Tests
   // ----------------------------------------
   test("Integer literal") {
-    testScanner("12345", NumberLiteral(12345) :: Nil)
+    testScanner("12345", NUMBER(12345) :: Nil)
   }
 
   test("Decimal literal") {
-    testScanner("12345.6789", NumberLiteral(12345.6789) :: Nil)
+    testScanner("12345.6789", NUMBER(12345.6789) :: Nil)
   }
 
   test("Multiline number literal") {
-    testScanner("123.45\n6789", NumberLiteral(123.45) :: NumberLiteral(6789) :: Nil)
+    testScanner("123.45\n6789", NUMBER(123.45) :: NUMBER(6789) :: Nil)
   }
 
   test("Multiple decimals") {
-    testScanner("1.2.3", NumberLiteral(1.2) :: DOT :: NumberLiteral(3) :: Nil)
+    testScanner("1.2.3", NUMBER(1.2) :: DOT :: NUMBER(3) :: Nil)
   }
 
   test("Multiline number with literal extra decimals") {
-    testScanner("123.45\n67.89.10", NumberLiteral(123.45) :: NumberLiteral(67.89) ::
-      DOT :: NumberLiteral(10) :: Nil)
+    testScanner("123.45\n67.89.10", NUMBER(123.45) :: NUMBER(67.89) ::
+      DOT :: NUMBER(10) :: Nil)
   }
 
   // ----------------------------------------
@@ -85,7 +85,7 @@ class ScannerTest extends AnyFunSuite {
 
   test("User Identifiers") {
     testScanner("a.b f45",
-      UserIdentifier("a") :: DOT :: UserIdentifier("b") :: UserIdentifier("f45") :: Nil)
+      IDENTIFIER("a") :: DOT :: IDENTIFIER("b") :: IDENTIFIER("f45") :: Nil)
   }
 
   test("If statement") {
@@ -94,8 +94,8 @@ class ScannerTest extends AnyFunSuite {
         | print(x);
         |}
         |""".stripMargin,
-      IF :: OPEN_PAREN :: UserIdentifier("x") :: EQUAL :: NumberLiteral(2) :: CLOSE_PAREN ::
-        OPEN_BRACE :: PRINT :: OPEN_PAREN :: UserIdentifier("x") :: CLOSE_PAREN :: SEMICOLON :: CLOSE_BRACE ::Nil)
+      IF :: OPEN_PAREN :: IDENTIFIER("x") :: EQUAL :: NUMBER(2) :: CLOSE_PAREN ::
+        OPEN_BRACE :: PRINT :: OPEN_PAREN :: IDENTIFIER("x") :: CLOSE_PAREN :: SEMICOLON :: CLOSE_BRACE ::Nil)
   }
 
   // ----------------------------------------
