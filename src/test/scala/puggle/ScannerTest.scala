@@ -86,11 +86,11 @@ class ScannerTest extends AnyFunSuite {
   test("If statement") {
     testScanner(
       """if (x == 2){
-        | print(x)
+        | print(x);
         |}
         |""".stripMargin,
       IF :: OPEN_PAREN :: UserIdentifier("x") :: EQUAL :: NumberLiteral(2) :: CLOSE_PAREN ::
-        OPEN_BRACE :: PRINT :: OPEN_PAREN :: UserIdentifier("x") :: CLOSE_PAREN:: CLOSE_BRACE ::Nil)
+        OPEN_BRACE :: PRINT :: OPEN_PAREN :: UserIdentifier("x") :: CLOSE_PAREN :: SEMICOLON :: CLOSE_BRACE ::Nil)
   }
 
   // ----------------------------------------
