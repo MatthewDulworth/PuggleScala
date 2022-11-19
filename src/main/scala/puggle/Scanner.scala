@@ -131,6 +131,5 @@ class Scanner(src: String) {
 
     NumberLiteral(src.substring(begin, cursor + 1).toDouble)
 
-  private def identifier(): Token =
-
+  private def identifier(): Token = ???
 }
