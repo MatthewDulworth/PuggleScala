@@ -1,18 +1,18 @@
 package puggle
 
 
-sealed trait Token
-case object EOF extends Token
+sealed trait TOKEN
+case object EOF extends TOKEN
 
 // ----------------------------------------
 // Identifiers
 // ----------------------------------------
-sealed trait Id extends Token
-case class IDENTIFIER(lexeme: String) extends Id
+sealed trait ID extends TOKEN
+case class IDENTIFIER(lexeme: String) extends ID
 
-sealed trait Keyword extends Id
-case object AND extends Keyword with Operator
-case object OR extends Keyword with Operator
+sealed trait Keyword extends ID
+case object AND extends Keyword with OPERATOR
+case object OR extends Keyword with OPERATOR
 
 case object IF extends Keyword
 case object ELSE extends Keyword
@@ -23,9 +23,9 @@ case object CLASS extends Keyword
 case object FUNC extends Keyword
 case object THIS extends Keyword
 
-case object TRUE extends Keyword with Literal
-case object FALSE extends Keyword with Literal
-case object NIL extends Keyword with Literal
+case object TRUE extends Keyword
+case object FALSE extends Keyword
+case object NIL extends Keyword
 
 case object VAL extends Keyword
 case object VAR extends Keyword
@@ -35,42 +35,43 @@ case object PRINT extends Keyword
 // ----------------------------------------
 // Separators
 // ----------------------------------------
-case object OPEN_PAREN extends Token
-case object CLOSE_PAREN extends Token
+case object OPEN_PAREN extends TOKEN
+case object CLOSE_PAREN extends TOKEN
 
-case object OPEN_BRACE extends Token
-case object CLOSE_BRACE extends Token
+case object OPEN_BRACE extends TOKEN
+case object CLOSE_BRACE extends TOKEN
 
-case object COMMA extends Token
-case object SEMICOLON extends Token
+case object COMMA extends TOKEN
+case object SEMICOLON extends TOKEN
 
 // ----------------------------------------
 // Literals
 // ----------------------------------------
-sealed trait Literal extends Token
+sealed trait LITERAL extends TOKEN:
+  val value: Any
 
-case class STRING(value: String) extends Literal
-case class NUMBER(value: Double) extends Literal
+case class STRING(value: String) extends LITERAL
+case class NUMBER(value: Double) extends LITERAL
 
 // ----------------------------------------
 // Operators
 // ----------------------------------------
-sealed trait Operator extends Token
+sealed trait OPERATOR extends TOKEN
 
-case object DOT extends Operator
-case object ASSIGN extends Operator
+case object DOT extends OPERATOR
+case object ASSIGN extends OPERATOR
 
 // Arithmetic Operators
-case object MINUS extends Operator
-case object PLUS extends Operator
-case object MULTIPLY extends Operator
-case object DIVIDE extends Operator
+case object MINUS extends OPERATOR
+case object PLUS extends OPERATOR
+case object MULTIPLY extends OPERATOR
+case object DIVIDE extends OPERATOR
 
 // Logical Operators
-case object NOT extends Operator
-case object NOT_EQUAL extends Operator
-case object GREATER extends Operator
-case object GREATER_EQUAL extends Operator
-case object LESSER extends Operator
-case object LESSER_EQUAL extends Operator
-case object EQUAL extends Operator
+case object NOT extends OPERATOR
+case object NOT_EQUAL extends OPERATOR
+case object GREATER extends OPERATOR
+case object GREATER_EQUAL extends OPERATOR
+case object LESSER extends OPERATOR
+case object LESSER_EQUAL extends OPERATOR
+case object EQUAL extends OPERATOR

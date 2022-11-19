@@ -106,7 +106,7 @@ class ScannerTest extends AnyFunSuite {
     Error.clear()
   }
 
-  def testScanner(in: String, exp: List[Token]): Unit = {
+  def testScanner(in: String, exp: List[TOKEN]): Unit = {
     val tokens = Scanner(in).scan()
     val expected = EOF :: exp.reverse
     assertResult(expected.reverse){tokens}
