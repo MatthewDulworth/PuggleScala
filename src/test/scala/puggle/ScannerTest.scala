@@ -13,7 +13,7 @@ class ScannerTest extends AnyFunSuite {
   }
 
   // ----------------------------------------
-  // String Tests
+  // String Literal Tests
   // ----------------------------------------
   test("Single string") {
     testScanner("\"hello\"", StringLiteral("hello") :: Nil)
@@ -37,6 +37,29 @@ class ScannerTest extends AnyFunSuite {
     testErrors(UnterminatedString(0))
   }
 
+  // ----------------------------------------
+  // Number Literal Tests
+  // ----------------------------------------
+  test("Integer literal") {
+    testScanner("12345", NumberLiteral(12345) :: Nil)
+  }
+
+  test("Decimal literal") {
+    testScanner("12345.6789", NumberLiteral(12345.6789) :: Nil)
+  }
+
+  test("Multiline number literal") {
+    testScanner("123.45\n6789", NumberLiteral(123.45) :: NumberLiteral(6789) :: Nil)
+  }
+
+  test("Multiple decimals") {
+    testScanner("1.2.3", NumberLiteral(1.2) :: DOT :: NumberLiteral(3) :: Nil)
+  }
+
+  test("Multiline number with literal extra decimals") {
+    testScanner("123.45\n67.89.10", NumberLiteral(123.45) :: NumberLiteral(67.89) ::
+      DOT :: NumberLiteral(10) :: Nil)
+  }
 
   // ----------------------------------------
   // Helpers

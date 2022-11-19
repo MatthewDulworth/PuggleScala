@@ -60,5 +60,5 @@ case object EQUAL extends Token:
 // Literals
 case class StringLiteral(value: String) extends Token:
   val lexeme: String = value
-case class NumberLiteral(value: Int) extends Token:
+case class NumberLiteral(value: Double) extends Token:
   val lexeme: String = value.toString

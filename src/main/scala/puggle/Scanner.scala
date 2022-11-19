@@ -7,6 +7,7 @@ class Scanner(src: String) {
 
   private var cursor = -1
   private var line = 0
+  private val EOF_CHAR = '\u0000'
 
   /**
    * @return Scans the given string of source code into a List of Tokens.
@@ -26,14 +27,14 @@ class Scanner(src: String) {
   /**
    * @return The next token in the source string.
    */
-  private def nextToken(): Token = nextChar match
+  private def nextToken(): Token = nextChar() match
       case Some(c) => scanToken(c)
       case None => EOF
 
   /**
    * @return Advances to the next char in the source string.
    */
-  private def nextChar: Option[Char] =
+  private def nextChar(): Option[Char] =
     cursor += 1
     if cursor < src.length then
       Some(src.charAt(cursor))
@@ -42,10 +43,18 @@ class Scanner(src: String) {
   /**
    * @return Peaks at the next char in the source string without advancing
    */
-  private def peekNext(): Option[Char] =
+  private def peekNext: Char =
     if cursor + 1 < src.length then
-      Some(src.charAt(cursor + 1))
-    else None
+      src.charAt(cursor + 1)
+    else EOF_CHAR
+
+  /**
+   * @return Peeks at the char after next in the source without advancing.
+   */
+  private def peekOver: Char =
+    if cursor + 2 < src.length then
+      src.charAt(cursor + 2)
+    else EOF_CHAR
 
   /**
    * @param c The character in the source at the cursor.
@@ -68,6 +77,7 @@ class Scanner(src: String) {
     case '<' => if matchNext('=') then LESSER_EQUAL else LESSER
     case '!' => if matchNext('=') then NOT_EQUAL else NOT
     case '"' => string()
+    case d if d.isDigit => number();
     case ' ' | '\r' | '\t' => nextToken()
     case '\n' => line += 1; nextToken()
     case _ => Error.report(UnexpectedCharacter(c, line)); nextToken()
@@ -76,36 +86,47 @@ class Scanner(src: String) {
    * @param expected The next expected character.
    * @return true if the next char is expected.
    */
-  private def matchNext(expected: Char) = peekNext() match
-    case Some(c) if c == expected => nextChar; true
+  private def matchNext(expected: Char) = peekNext match
+    case c if c == expected => nextChar(); true
     case _ => false
 
   /**
    * @return Eats a line, returns the next token.
    */
   private def comment(): Token =
-    while peekNext().isDefined && peekNext().get != '\n' do
-      nextChar
+    while peekNext != EOF_CHAR && peekNext != '\n' do nextChar()
     nextToken()
 
   /**
-   * @return A string token.
+   * @return A string token starting at cursor.
    */
   private def string(): Token =
     val begin = cursor
     val begin_line = line
 
     // Consume chars until end of string or end of file.
-    while peekNext().isDefined && peekNext().get != '"' do
-      if peekNext().get == '\n' then line += 1
-      nextChar
+    while peekNext != EOF_CHAR && peekNext != '"' do
+      if peekNext == '\n' then line += 1
+      nextChar()
 
     // Consume closing " if it exits, otherwise it don't matter baby
-    nextChar
+    nextChar()
 
     // Check for unterminated string
     if cursor == src.length then
       Error.report(UnterminatedString(begin_line))
 
     StringLiteral(src.substring(begin + 1, cursor))
+
+  /**
+   * @return A number token starting at cursor
+   */
+  private def number(): Token =
+    val begin = cursor
+    while peekNext.isDigit do nextChar()
+    if peekNext == '.' && peekOver.isDigit then
+      nextChar()
+      while peekNext.isDigit do nextChar()
+
+    NumberLiteral(src.substring(begin, cursor + 1).toDouble)
 }
