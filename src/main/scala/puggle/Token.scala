@@ -7,58 +7,73 @@ sealed trait Token:
 case object EOF extends Token:
   val lexeme = "\u0000"
 
-case class Identifier(lexeme: String) extends Token
+// ----------------------------------------
+// Identifiers
+// ----------------------------------------
+sealed trait Identifier extends Token
+case class UserIdentifier(lexeme: String) extends Identifier
+case class Keyword(lexeme: String) extends Identifier
 
-// Parentheses
+// ----------------------------------------
+// Separators
+// ----------------------------------------
 case object LEFT_PAREN extends Token:
   val lexeme = "("
 case object RIGHT_PAREN extends Token:
   val lexeme = ")"
 
-// Braces
 case object LEFT_BRACE extends Token:
   val lexeme = "{"
 case object RIGHT_BRACE extends Token:
   val lexeme = "}"
 
-// Punctuation
-case object DOT extends Token:
-  val lexeme = "."
 case object COMMA extends Token:
   val lexeme = ","
 case object SEMICOLON extends Token:
   val lexeme = ";"
 
-// Arithmetic Operators
-case object ASSIGN extends Token:
+// ----------------------------------------
+// Literals
+// ----------------------------------------
+sealed trait Literal extends Token
+
+case class StringLiteral(value: String) extends Literal:
+  val lexeme: String = value
+case class NumberLiteral(value: Double) extends Literal:
+  val lexeme: String = value.toString
+
+// ----------------------------------------
+// Operators
+// ----------------------------------------
+sealed trait Operator extends Token
+
+case object DOT extends Operator:
+  val lexeme = "."
+case object ASSIGN extends Operator:
   val lexeme = "="
-case object MINUS extends Token:
+
+// Arithmetic Operators
+case object MINUS extends Operator:
   val lexeme = "-"
-case object PLUS extends Token:
+case object PLUS extends Operator:
   val lexeme = "+"
-case object MULTIPLY extends Token:
+case object MULTIPLY extends Operator:
   val lexeme = "*"
-case object DIVIDE extends Token:
+case object DIVIDE extends Operator:
   val lexeme = "/"
 
 // Logical Operators
-case object NOT extends Token:
+case object NOT extends Operator:
   val lexeme = "!"
-case object NOT_EQUAL extends Token:
+case object NOT_EQUAL extends Operator:
   val lexeme = "!="
-case object GREATER extends Token:
+case object GREATER extends Operator:
   val lexeme = ">"
-case object GREATER_EQUAL extends Token:
+case object GREATER_EQUAL extends Operator:
   val lexeme = ">="
-case object LESSER extends Token:
+case object LESSER extends Operator:
   val lexeme = "<"
-case object LESSER_EQUAL extends Token:
+case object LESSER_EQUAL extends Operator:
   val lexeme = "<="
-case object EQUAL extends Token:
+case object EQUAL extends Operator:
   val lexeme = "=="
-
-// Literals
-case class StringLiteral(value: String) extends Token:
-  val lexeme: String = value
-case class NumberLiteral(value: Double) extends Token:
-  val lexeme: String = value.toString

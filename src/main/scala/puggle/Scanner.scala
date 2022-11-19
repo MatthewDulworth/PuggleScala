@@ -78,6 +78,7 @@ class Scanner(src: String) {
     case '!' => if matchNext('=') then NOT_EQUAL else NOT
     case '"' => string()
     case d if d.isDigit => number();
+    case l if l.isLetter => identifier();
     case ' ' | '\r' | '\t' => nextToken()
     case '\n' => line += 1; nextToken()
     case _ => Error.report(UnexpectedCharacter(c, line)); nextToken()
@@ -129,4 +130,7 @@ class Scanner(src: String) {
       while peekNext.isDigit do nextChar()
 
     NumberLiteral(src.substring(begin, cursor + 1).toDouble)
+
+  private def identifier(): Token =
+
 }
