@@ -20,7 +20,6 @@ object Puggle {
    */
   def main(args: Array[String]): Unit =
     if args.length > 1 then
-      //
       println("Usage: puggle [script]")
       System.exit(INVOKE_ERROR)
     else if args.length == 1 then
@@ -46,7 +45,10 @@ object Puggle {
   private def runREPL(): Unit =
     print("> ")
     readLine() match
-      case line: String if line != EXIT_CMD => run(line); runREPL()
+      case line: String if line != EXIT_CMD => 
+        run(line)
+        Error.clear()
+        runREPL()
       case _ => println("Exiting REPL")
 
 
@@ -56,9 +58,7 @@ object Puggle {
    * @param src Source code to run.
    */
   private def run(src: String): Unit =
-    println("Source:")
-    println("'" + src + "'")
+    println("Scanning...")
     val tokens = Scanner(src).scan()
     println(tokens)
-//    Error.reportInvalidTokens(tokens)
 }
