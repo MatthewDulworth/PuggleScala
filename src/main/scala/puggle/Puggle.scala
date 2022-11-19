@@ -36,6 +36,7 @@ object Puggle {
   private def runFile(path: String): Unit =
     val file = Source.fromFile(path)
     try run(file.getLines.mkString("\n")) finally file.close()
+    if !Error.noErrors then System.exit(PUGGLE_ERROR)
 
 
   /**
@@ -45,7 +46,7 @@ object Puggle {
   private def runREPL(): Unit =
     print("> ")
     readLine() match
-      case line: String if line != EXIT_CMD => 
+      case line: String if line != EXIT_CMD =>
         run(line)
         Error.clear()
         runREPL()
