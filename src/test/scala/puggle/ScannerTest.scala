@@ -13,6 +13,19 @@ class ScannerTest extends AnyFunSuite {
   }
 
   // ----------------------------------------
+  // Keyword BiMap
+  // ----------------------------------------
+  test("Invalid keyword bimap string access") {
+    val x: Option[Keyword] = keywords("sdfsdf")
+    assert(x.isEmpty)
+  }
+
+  test("Valid keyword bimap string access") {
+    val x: Option[Keyword] = keywords("if")
+    assert(x.get == IF)
+  }
+
+  // ----------------------------------------
   // String Literal Tests
   // ----------------------------------------
   test("Single string") {

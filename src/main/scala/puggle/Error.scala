@@ -9,7 +9,6 @@ case object Error:
    def clear(): Unit = errors.clear()
    def display(): Unit = errors.foreach(println(_))
    override def toString: String = errors.toList.toString
-   
 
 sealed trait Error:
    val line: Int
