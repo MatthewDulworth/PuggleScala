@@ -8,8 +8,8 @@ case object EOF extends Token
 // ----------------------------------------
 sealed trait Identifier extends Token
 case class UserIdentifier(lexeme: String) extends Identifier
-sealed trait Keyword extends Identifier
 
+sealed trait Keyword extends Identifier
 case object AND extends Keyword with Operator
 case object OR extends Keyword with Operator
 

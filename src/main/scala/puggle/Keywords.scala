@@ -1,21 +1,19 @@
 package puggle
 
 val keywords = new BiMap(
-  "AND" -> AND,
-  "OR" -> OR,
-  "IF" -> IF,
-  "ELSE" -> ELSE,
-  "FOR" -> FOR,
-  "WHILE" -> WHILE,
-  "CLASS" -> CLASS,
-  "FUNC" -> FUNC,
-  "THIS" -> THIS,
-  "TRUE" -> TRUE,
-  "FALSE" -> FALSE,
-  "NIL" -> NIL,
-  "VAL" -> VAL,
-  "VAR" -> VAR,
-  "PRINT" -> PRINT,
+  "and" -> AND,
+  "or" -> OR,
+  "if" -> IF,
+  "else" -> ELSE,
+  "for" -> FOR,
+  "while" -> WHILE,
+  "class" -> CLASS,
+  "func" -> FUNC,
+  "this" -> THIS,
+  "true" -> TRUE,
+  "false" -> FALSE,
+  "nil" -> NIL,
+  "val" -> VAL,
+  "var" -> VAR,
+  "print" -> PRINT,
 )
-
-val x = keywords(AND)
