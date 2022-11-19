@@ -8,7 +8,7 @@ class ScannerTest extends AnyFunSuite {
   }
 
   test("Single Character Tokens") {
-    testScanner("(){}.,;+-*", LEFT_PAREN :: RIGHT_PAREN :: LEFT_BRACE :: RIGHT_BRACE :: DOT ::
+    testScanner("(){}.,;+-*", OPEN_PAREN :: CLOSE_PAREN :: OPEN_BRACE :: CLOSE_BRACE :: DOT ::
       COMMA :: SEMICOLON :: PLUS :: MINUS :: MULTIPLY :: Nil)
   }
 
@@ -72,6 +72,25 @@ class ScannerTest extends AnyFunSuite {
   test("Multiline number with literal extra decimals") {
     testScanner("123.45\n67.89.10", NumberLiteral(123.45) :: NumberLiteral(67.89) ::
       DOT :: NumberLiteral(10) :: Nil)
+  }
+
+  // ----------------------------------------
+  // Identifiers
+  // ----------------------------------------
+  test("Keywords") {
+    testScanner("and or if else for while class func this true false nil val var print",
+      AND :: OR :: IF :: ELSE :: FOR :: WHILE :: CLASS :: FUNC :: THIS :: TRUE ::
+        FALSE :: NIL :: VAL :: VAR :: PRINT:: Nil)
+  }
+
+  test("If statement") {
+    testScanner(
+      """if (x == 2){
+        | print(x)
+        |}
+        |""".stripMargin,
+      IF :: OPEN_PAREN :: UserIdentifier("x") :: EQUAL :: NumberLiteral(2) :: CLOSE_PAREN ::
+        OPEN_BRACE :: PRINT :: OPEN_PAREN :: UserIdentifier("x") :: CLOSE_PAREN:: CLOSE_BRACE ::Nil)
   }
 
   // ----------------------------------------

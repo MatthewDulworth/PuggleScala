@@ -34,11 +34,11 @@ case object PRINT extends Keyword
 // ----------------------------------------
 // Separators
 // ----------------------------------------
-case object LEFT_PAREN extends Token
-case object RIGHT_PAREN extends Token
+case object OPEN_PAREN extends Token
+case object CLOSE_PAREN extends Token
 
-case object LEFT_BRACE extends Token
-case object RIGHT_BRACE extends Token
+case object OPEN_BRACE extends Token
+case object CLOSE_BRACE extends Token
 
 case object COMMA extends Token
 case object SEMICOLON extends Token
