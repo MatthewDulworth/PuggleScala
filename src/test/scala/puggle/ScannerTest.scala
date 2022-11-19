@@ -83,6 +83,11 @@ class ScannerTest extends AnyFunSuite {
         FALSE :: NIL :: VAL :: VAR :: PRINT:: Nil)
   }
 
+  test("User Identifiers") {
+    testScanner("a.b f45",
+      UserIdentifier("a") :: DOT :: UserIdentifier("b") :: UserIdentifier("f45") :: Nil)
+  }
+
   test("If statement") {
     testScanner(
       """if (x == 2){
