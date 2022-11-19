@@ -7,6 +7,7 @@ case object Error:
    private val errors: ListBuffer[Error] = ListBuffer.empty
    def report(error: Error): Unit = errors.append(error)
    def display(): Unit = errors.foreach(println(_))
+   override def toString: String = errors.toList.toString
 
 sealed trait Error:
    val line: Int
