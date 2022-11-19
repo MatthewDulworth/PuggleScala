@@ -1,5 +1,7 @@
 package puggle
 
+import tools.BiMap
+
 val keywords = new BiMap(
   "and" -> AND,
   "or" -> OR,

@@ -1,4 +1,4 @@
-package puggle
+package tools
 
 /**
  * Adapted from https://stackoverflow.com/a/9851520/9396808
