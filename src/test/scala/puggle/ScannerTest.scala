@@ -12,6 +12,9 @@ class ScannerTest extends AnyFunSuite {
       COMMA :: SEMICOLON :: PLUS :: MINUS :: MULTIPLY :: Nil)
   }
 
+  // ----------------------------------------
+  // String Tests
+  // ----------------------------------------
   test("Single string") {
     testScanner("\"hello\"", StringLiteral("hello") :: Nil)
   }
@@ -25,8 +28,22 @@ class ScannerTest extends AnyFunSuite {
     testErrors(UnterminatedString(0))
   }
 
+  test("multi-line string") {
+    testScanner("\"hello\ngoodbye\"", StringLiteral("hello\ngoodbye") :: Nil)
+  }
+
+  test("multi-line unterminated string") {
+    testScanner("\"hello\ngoodbye", StringLiteral("hello\ngoodbye") :: Nil)
+    testErrors(UnterminatedString(0))
+  }
+
+
+  // ----------------------------------------
+  // Helpers
+  // ----------------------------------------
   def testErrors(expected: Error*): Unit = {
     assertResult(expected.toList.toString()){Error.toString}
+    Error.clear()
   }
 
   def testScanner(in: String, exp: List[Token]): Unit = {

@@ -93,6 +93,7 @@ class Scanner(src: String) {
    */
   private def string(): Token =
     val begin = cursor
+    val begin_line = line
 
     // Consume chars until end of string or end of file.
     while peekNext().isDefined && peekNext().get != '"' do
@@ -104,7 +105,7 @@ class Scanner(src: String) {
 
     // Check for unterminated string
     if cursor == src.length then
-      Error.report(UnterminatedString(line))
+      Error.report(UnterminatedString(begin_line))
 
     StringLiteral(src.substring(begin + 1, cursor))
 }

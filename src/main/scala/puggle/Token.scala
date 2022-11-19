@@ -7,8 +7,6 @@ sealed trait Token:
 case object EOF extends Token:
   val lexeme = "\u0000"
 
-case class InvalidToken(lexeme: String, line: Int) extends Token
-
 case class Identifier(lexeme: String) extends Token
 
 // Parentheses
