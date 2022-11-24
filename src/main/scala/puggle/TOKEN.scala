@@ -47,8 +47,7 @@ case object SEMICOLON extends TOKEN
 // ----------------------------------------
 // Literals
 // ----------------------------------------
-sealed trait LITERAL extends TOKEN:
-  val value: Any
+sealed trait LITERAL extends TOKEN
 
 case class STRING(value: String) extends LITERAL
 case class NUMBER(value: Double) extends LITERAL
