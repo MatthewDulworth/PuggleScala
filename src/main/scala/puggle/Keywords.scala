@@ -14,7 +14,7 @@ val keywords = new BiMap(
   "this" -> THIS,
   "true" -> TRUE,
   "false" -> FALSE,
-  "nil" -> NIL,
+  "nil" -> NULL,
   "val" -> VAL,
   "var" -> VAR,
   "print" -> PRINT,

@@ -16,12 +16,12 @@ class ScannerTest extends AnyFunSuite {
   // Keyword BiMap
   // ----------------------------------------
   test("Invalid keyword bimap string access") {
-    val x: Option[Keyword] = keywords("sdfsdf")
+    val x: Option[KEYWORD] = keywords("sdfsdf")
     assert(x.isEmpty)
   }
 
   test("Valid keyword bimap string access") {
-    val x: Option[Keyword] = keywords("if")
+    val x: Option[KEYWORD] = keywords("if")
     assert(x.get == IF)
   }
 
@@ -80,7 +80,7 @@ class ScannerTest extends AnyFunSuite {
   test("Keywords") {
     testScanner("and or if else for while class func this true false nil val var print",
       AND :: OR :: IF :: ELSE :: FOR :: WHILE :: CLASS :: FUNC :: THIS :: TRUE ::
-        FALSE :: NIL :: VAL :: VAR :: PRINT:: Nil)
+        FALSE :: NULL :: VAL :: VAR :: PRINT:: Nil)
   }
 
   test("User Identifiers") {

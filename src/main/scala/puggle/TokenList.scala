@@ -11,7 +11,7 @@ class TokenList(private val _tokens: List[TOKEN]) {
       tokens(cursor)
     else EOF
   
-  def peekNext: TOKEN = 
+  def peekNext: TOKEN =
     val i = cursor + 1
     if i < tokens.length || i < 0 then
       tokens(i)
