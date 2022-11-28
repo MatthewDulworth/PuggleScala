@@ -1,14 +1,24 @@
 package puggle
 
-class Parser(private val list: List[TOKEN]) {
-  private val tokens = TokenList(list)
+import scala.annotation.tailrec
 
-  def parse(): Expr = expression()
+case object Parser {
+  def apply(tokens: List[TOKEN]): Option[Expr] =
+    assert(tokens.nonEmpty)
+    assert(tokens.last == EOF)
+
+    val list = TokenList(tokens)
+    Parser(list).parse()
+}
+
+
+private case class Parser(tokens: TokenList) {
+  def parse(): Option[Expr] = expression()
 
   /**
    * @return expression → equality
    */
-  private def expression(): Expr = primary()
+  private def expression(): Option[Expr] = primary()
 
   /**
    * @return equality → comparison ( ( "!=" | "==" ) comparison )*
@@ -25,39 +35,49 @@ class Parser(private val list: List[TOKEN]) {
   /**
    * @return comparison → term ( ( ">" | ">=" | "<" | "<=" ) term )*
    */
-  private def comparison(): Expr = term()
+  private def comparison(): Expr = ???
 
   /**
    * @return term → factor ( ( "-" | "+" ) factor )*
    */
-  private def term(): Expr = factor()
+  private def term(): Expr = ???
 
   /**
    * @return factor → unary ( ( "/" | "*" ) unary )*
    */
-  private def factor(): Expr = unary()
+  private def factor(): Expr = ???
 
   /**
    * @return unary → ( "!" | "-" ) unary | primary
    */
-  private def unary(): Expr = primary()
+  private def unary(): Expr = ???
 
   /**
-   * @return primary → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
+   * Parses the next token into a primary expression.
+   * @return primary → NUMBER | STRING | "true" | "false" | "nil" | grouping
    */
-  private def primary(): Expr = tokens.next() match
-    case t: Lit => Literal(t)
+  private def primary(): Option[Expr] = tokens.next() match
+    case t: LiteralToken => Some(Literal(t))
+    case OPEN_PAREN => grouping()
+    case EOF => None
+    case _ => parseError(UnexpectedToken(tokens.peek))
 
-    // "(" expression ")"
-    case OPEN_PAREN =>
-      val expr = expression()
-      tokens.next() match
-        case CLOSE_PAREN => Grouping(expr)
-        case _ =>
-          Error.report(MissingExpectedToken(CLOSE_PAREN))
-          expression()
+  /**
+   * Parses the next token into a grouping. 
+   * @return grouping → "(" expression ")"
+   */
+  private def grouping(): Option[Expr] =
+    val expr = expression()
+    tokens.next() match
+      case CLOSE_PAREN => Grouping(expr)
+      case _ => parseError(MissingExpectedToken(CLOSE_PAREN))
 
-    case _ =>
-      Error.report(UnexpectedToken(tokens.peek))
-      expression()
+  /**
+   * Reports a parsing error than returns None.
+   * @param error The type of parse error to report. 
+   * @return None
+   */
+  private def parseError(error: Error): Option[Expr] =
+    Error.report(error)
+    None
 }

@@ -1,36 +1,51 @@
 package puggle
 
+import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 
 class ParserTest extends AnyFunSuite {
 
-  test("Test Primary: False Literal") {
-    val tokens = FALSE :: Nil
-    val res = Parser(tokens).parse()
-    assertResult(Literal(FALSE))(res)
+  def testParser(in: List[TOKEN], out: Option[Expr]): Assertion =
+    val res = Parser(in)
+    assertResult(out)(res)
+    assert(Error.noErrors)
+
+  def testError(in: List[TOKEN], out: Option[Expr], errors: List[Error]): Assertion =
+    val res = Parser(in)
+    assertResult(out)(res)
+    assertResult(errors)(Error.log)
+
+  // ----------------------------------------
+  // Test Primary
+  // ----------------------------------------
+  test("Empty") {
+    testParser(EOF :: Nil, None)
   }
 
-  test("Test Primary: True Literal") {
-    val tokens = TRUE :: Nil
-    val res = Parser(tokens).parse()
-    assertResult(Literal(TRUE))(res)
+  test("Primary: False Literal") {
+    testParser(FALSE :: EOF :: Nil, Some(Literal(FALSE)))
   }
 
-  test("Test Primary: Number Literal") {
-    val tokens = NUMBER(2) :: Nil
-    val res = Parser(tokens).parse()
-    assertResult(Literal(NUMBER(2)))(res)
+  test("Primary: True Literal") {
+    testParser(TRUE :: EOF :: Nil, Some(Literal(TRUE)))
   }
 
-  test("Test Primary: String Literal") {
-    val tokens = STRING("2") :: Nil
-    val res = Parser(tokens).parse()
-    assertResult(Literal(STRING("2")))(res)
+  test("Primary: Number Literal") {
+    testParser(NUMBER(2) :: EOF :: Nil, Some(Literal(NUMBER(2))))
   }
 
-  test("Test Primary: Null Literal") {
-    val tokens = NULL :: Nil
-    val res = Parser(tokens).parse()
-    assertResult(Literal(NULL))(res)
+  test("Primary: String Literal") {
+    testParser(STRING("2") :: EOF :: Nil, Some(Literal(STRING("2"))))
+  }
+
+  test("Primary: Null Literal") {
+    testParser(NULL :: EOF :: Nil, Some(Literal(NULL)))
+  }
+
+  // ----------------------------------------
+  // Test Grouping
+  // ----------------------------------------
+  test("Grouping") {
+    testParser(OPEN_PAREN :: TRUE :: CLOSE_PAREN :: EOF :: Nil, Some(Grouping(Literal(TRUE))))
   }
 }

@@ -5,6 +5,7 @@ import scala.collection.mutable.ListBuffer
 
 case object Error:
    private val errorLog: ListBuffer[Error] = ListBuffer.empty
+   def log: List[Error] = errorLog.toList
    def clear(): Unit = errorLog.clear()
    def noErrors: Boolean = errorLog.isEmpty
    
@@ -12,7 +13,7 @@ case object Error:
       errorLog.append(error)
       println(error)
 
-   override def toString: String = errorLog.toList.toString()
+   override def toString: String = log.toString()
 
 sealed trait Error:
    val line: Int

@@ -23,9 +23,9 @@ case object CLASS extends KEYWORD
 case object FUNC extends KEYWORD
 case object THIS extends KEYWORD
 
-case object TRUE extends KEYWORD with Lit
-case object FALSE extends KEYWORD with Lit
-case object NULL extends KEYWORD with Lit
+case object TRUE extends KEYWORD with LiteralToken
+case object FALSE extends KEYWORD with LiteralToken
+case object NULL extends KEYWORD with LiteralToken
 
 case object VAL extends KEYWORD
 case object VAR extends KEYWORD
@@ -47,10 +47,10 @@ case object SEMICOLON extends TOKEN
 // ----------------------------------------
 // Literals
 // ----------------------------------------
-sealed trait Lit extends TOKEN
+sealed trait LiteralToken extends TOKEN
 
-case class STRING(value: String) extends Lit
-case class NUMBER(value: Double) extends Lit
+case class STRING(value: String) extends LiteralToken
+case class NUMBER(value: Double) extends LiteralToken
 
 // ----------------------------------------
 // Operators
