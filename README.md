@@ -1,4 +1,4 @@
-# Puggle Grammer v2
+# Puggle Grammar v2
 
 ```
 expression  →  equality
@@ -13,7 +13,7 @@ grouping    → "(" expression ")" ;
 ```
 
 
-# Puggle Grammer v1
+# Puggle Grammar v1
 
 ```
 expression  -> literal | unary | binary | grouping ;
