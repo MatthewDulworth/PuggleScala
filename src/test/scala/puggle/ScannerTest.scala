@@ -16,12 +16,12 @@ class ScannerTest extends AnyFunSuite {
   // Keyword BiMap
   // ----------------------------------------
   test("Invalid keyword bimap string access") {
-    val x: Option[KEYWORD] = keywords("sdfsdf")
+    val x: Option[Keyword] = keywords("sdfsdf")
     assert(x.isEmpty)
   }
 
   test("Valid keyword bimap string access") {
-    val x: Option[KEYWORD] = keywords("if")
+    val x: Option[Keyword] = keywords("if")
     assert(x.get == IF)
   }
 
@@ -106,7 +106,7 @@ class ScannerTest extends AnyFunSuite {
     Error.clear()
   }
 
-  def testScanner(in: String, exp: List[TOKEN]): Unit = {
+  def testScanner(in: String, exp: List[Token]): Unit = {
     val tokens = Scanner(in).scan()
     val expected = EOF :: exp.reverse
     assertResult(expected.reverse){tokens}

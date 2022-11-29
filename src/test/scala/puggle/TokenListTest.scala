@@ -7,7 +7,7 @@ class TokenListTest extends AnyFunSuite {
   test("TokenList") {
     val l = IF :: OPEN_PAREN :: TRUE :: CLOSE_PAREN :: Nil
     val tokens = TokenList(l)
-    var t: TOKEN = EOF
+    var t: Token = EOF
     val x = Iterator.continually {
       t = tokens.next()
       t
@@ -18,7 +18,7 @@ class TokenListTest extends AnyFunSuite {
   test("Empty TokenList") {
     val l = Nil
     val tokens = TokenList(l)
-    var t: TOKEN = EOF
+    var t: Token = EOF
     val x = Iterator.continually {
       t = tokens.next()
       t
@@ -29,7 +29,7 @@ class TokenListTest extends AnyFunSuite {
   test("Peek") {
     val l = IF :: OPEN_PAREN :: TRUE :: CLOSE_PAREN :: Nil
     val tokens = TokenList(l)
-    var t: TOKEN = EOF
+    var t: Token = EOF
     val x = Iterator.continually {
       tokens.next()
       t = tokens.peek
@@ -41,7 +41,7 @@ class TokenListTest extends AnyFunSuite {
   test("PeekNext") {
     val l = IF :: OPEN_PAREN :: TRUE :: CLOSE_PAREN :: Nil
     val tokens = TokenList(l)
-    var t: TOKEN = EOF
+    var t: Token = EOF
     val x = Iterator.continually {
       t = tokens.peekNext
       tokens.next()
@@ -52,7 +52,7 @@ class TokenListTest extends AnyFunSuite {
 
   test("Matches") {
     val tokens = TokenList(IF :: OPEN_PAREN :: TRUE :: CLOSE_PAREN :: Nil)
-    var t: TOKEN = EOF
+    var t: Token = EOF
     val x = Iterator.continually {
       t = tokens.next()
       tokens.matches(DOT, IF, FALSE, CLOSE_PAREN)
@@ -62,7 +62,7 @@ class TokenListTest extends AnyFunSuite {
 
   test("Matches Empty Tokens") {
     val tokens = TokenList(Nil)
-    var t: TOKEN = EOF
+    var t: Token = EOF
     val x = Iterator.continually {
       t = tokens.next()
       tokens.matches(DOT, IF, FALSE, CLOSE_PAREN)
@@ -72,7 +72,7 @@ class TokenListTest extends AnyFunSuite {
 
   test("Matches Empty Matchables") {
     val tokens = TokenList(IF :: OPEN_PAREN :: TRUE :: CLOSE_PAREN :: Nil)
-    var t: TOKEN = EOF
+    var t: Token = EOF
     val x = Iterator.continually {
       t = tokens.next()
       tokens.matches()

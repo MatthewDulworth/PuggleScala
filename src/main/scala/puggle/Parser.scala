@@ -3,7 +3,7 @@ package puggle
 import scala.annotation.tailrec
 
 case object Parser {
-  def apply(tokens: List[TOKEN]): Option[Expr] =
+  def apply(tokens: List[Token]): Option[Expr] =
     assert(tokens.nonEmpty)
     assert(tokens.last == EOF)
 
@@ -13,12 +13,12 @@ case object Parser {
 
 
 private case class Parser(tokens: TokenList) {
-  def parse(): Option[Expr] = expression()
+  def parse(): Option[Expr] = expression(tokens.next())
 
   /**
    * @return expression → equality
    */
-  private def expression(): Option[Expr] = primary()
+  private def expression(token: Token): Option[Expr] = unary(token)
 
   /**
    * @return equality → comparison ( ( "!=" | "==" ) comparison )*
@@ -50,24 +50,26 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return unary → ( "!" | "-" ) unary | primary
    */
-  private def unary(): Expr = ???
+  private def unary(token: Token): Option[Expr] = token match
+    case t: UnaryOp => Unary(t, unary(tokens.next()))
+    case _ => primary(token)
 
   /**
    * Parses the next token into a primary expression.
    * @return primary → NUMBER | STRING | "true" | "false" | "nil" | grouping
    */
-  private def primary(): Option[Expr] = tokens.next() match
+  private def primary(token: Token): Option[Expr] = token match
     case t: LiteralToken => Some(Literal(t))
     case OPEN_PAREN => grouping()
     case EOF => None
-    case _ => parseError(UnexpectedToken(tokens.peek))
+    case _ => parseError(UnexpectedToken(token))
 
   /**
    * Parses the next token into a grouping.
    * @return grouping → "(" expression ")"
    */
   private def grouping(): Option[Expr] =
-    val expr = expression()
+    val expr = expression(tokens.next())
     tokens.next() match
       case CLOSE_PAREN => Grouping(expr)
       case _ => parseError(MissingExpectedToken(CLOSE_PAREN))

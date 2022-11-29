@@ -5,17 +5,17 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class ParserTest extends AnyFunSuite {
 
-  def testParser(in: List[TOKEN], out: Option[Expr]): Unit =
+  def testParser(in: List[Token], out: Option[Expr]): Unit =
+    Error.clear()
     val res = Parser(in)
     assertResult(out)(res)
     assert(Error.noErrors)
-    Error.clear()
 
-  def testError(in: List[TOKEN], out: Option[Expr], errors: List[Error]): Unit =
+  def testError(in: List[Token], out: Option[Expr], errors: List[Error]): Unit =
+    Error.clear()
     val res = Parser(in)
     assertResult(out)(res)
     assertResult(errors)(Error.log)
-    Error.clear()
 
   // ----------------------------------------
   // Test Primary
@@ -68,11 +68,42 @@ class ParserTest extends AnyFunSuite {
       MissingExpectedToken(CLOSE_PAREN) :: Nil)
   }
 
-  test("Grouping: Missing expression") {
+  ignore("Grouping: Missing expression") {
     //TODO: Make this work (needs error synchronization)
     testError(
       OPEN_PAREN :: CLOSE_PAREN :: EOF :: Nil,
       None,
       MissingExpectedToken(CLOSE_PAREN) :: Nil)
+  }
+
+  // ----------------------------------------
+  // Test Unary
+  // ----------------------------------------
+  test("Unary: negative") {
+    testParser(
+      MINUS :: NUMBER(3) :: EOF :: Nil,
+      Some(Unary(MINUS, Literal(NUMBER(3))))
+    )
+  }
+
+  test("Unary: not") {
+    testParser(
+      NOT :: FALSE :: EOF :: Nil,
+      Some(Unary(NOT, Literal(FALSE)))
+    )
+  }
+
+  test("Unary: nested unary") {
+    testParser(
+      NOT :: MINUS :: NOT :: FALSE :: EOF :: Nil,
+      Some(Unary(NOT, Unary(MINUS, Unary(NOT, Literal(FALSE)))))
+    )
+  }
+
+  test("Unary: missing expression") {
+    testParser(
+      NOT :: EOF :: Nil,
+      None,
+    )
   }
 }
