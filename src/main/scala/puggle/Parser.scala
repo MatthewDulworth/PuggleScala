@@ -63,7 +63,7 @@ private case class Parser(tokens: TokenList) {
     case _ => parseError(UnexpectedToken(tokens.peek))
 
   /**
-   * Parses the next token into a grouping. 
+   * Parses the next token into a grouping.
    * @return grouping → "(" expression ")"
    */
   private def grouping(): Option[Expr] =
@@ -74,10 +74,14 @@ private case class Parser(tokens: TokenList) {
 
   /**
    * Reports a parsing error than returns None.
-   * @param error The type of parse error to report. 
+   * @param error The type of parse error to report.
    * @return None
    */
-  private def parseError(error: Error): Option[Expr] =
+  private def parseError(error: ParserError): Option[Expr] =
     Error.report(error)
     None
+
+//  private def syncParseError(error: ParserError): Option[Expr] =
+//    while (ne)
+//    parseError(error)
 }

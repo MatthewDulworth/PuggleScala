@@ -5,15 +5,17 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class ParserTest extends AnyFunSuite {
 
-  def testParser(in: List[TOKEN], out: Option[Expr]): Assertion =
+  def testParser(in: List[TOKEN], out: Option[Expr]): Unit =
     val res = Parser(in)
     assertResult(out)(res)
     assert(Error.noErrors)
+    Error.clear()
 
-  def testError(in: List[TOKEN], out: Option[Expr], errors: List[Error]): Assertion =
+  def testError(in: List[TOKEN], out: Option[Expr], errors: List[Error]): Unit =
     val res = Parser(in)
     assertResult(out)(res)
     assertResult(errors)(Error.log)
+    Error.clear()
 
   // ----------------------------------------
   // Test Primary
@@ -46,6 +48,31 @@ class ParserTest extends AnyFunSuite {
   // Test Grouping
   // ----------------------------------------
   test("Grouping") {
-    testParser(OPEN_PAREN :: TRUE :: CLOSE_PAREN :: EOF :: Nil, Some(Grouping(Literal(TRUE))))
+    testParser(
+      OPEN_PAREN :: TRUE :: CLOSE_PAREN :: EOF :: Nil,
+      Some(Grouping(Literal(TRUE)))
+    )
+  }
+
+  test("Grouping: Missing closing paren") {
+    testError(
+      OPEN_PAREN :: TRUE :: EOF :: Nil,
+      None,
+      MissingExpectedToken(CLOSE_PAREN) :: Nil)
+  }
+
+  test("Grouping: Missing expression and closing paren") {
+    testError(
+      OPEN_PAREN :: EOF :: Nil,
+      None,
+      MissingExpectedToken(CLOSE_PAREN) :: Nil)
+  }
+
+  test("Grouping: Missing expression") {
+    //TODO: Make this work (needs error synchronization)
+    testError(
+      OPEN_PAREN :: CLOSE_PAREN :: EOF :: Nil,
+      None,
+      MissingExpectedToken(CLOSE_PAREN) :: Nil)
   }
 }
