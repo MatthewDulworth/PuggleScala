@@ -18,7 +18,7 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return expression → equality
    */
-  private def expression(token: Token): Option[Expr] = unary(token)
+  private def expression(token: Token): Option[Expr] = factor(token)
 
   /**
    * @return equality → comparison ( ( "!=" | "==" ) comparison )*
@@ -45,7 +45,14 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return factor → unary ( ( "/" | "*" ) unary )*
    */
-  private def factor(): Expr = ???
+  private def factor(token: Token): Option[Expr] =
+    _factor(unary(token))
+
+  @tailrec
+  private def _factor(expr: Option[Expr]): Option[Expr] = tokens.next() match
+    case t: Factor => _factor(Binary(t, expr, unary(tokens.next())))
+    case _ => expr
+
 
   /**
    * @return unary → ( "!" | "-" ) unary | primary
@@ -70,7 +77,7 @@ private case class Parser(tokens: TokenList) {
    */
   private def grouping(): Option[Expr] =
     val expr = expression(tokens.next())
-    tokens.next() match
+    tokens.peek match
       case CLOSE_PAREN => Grouping(expr)
       case _ => parseError(MissingExpectedToken(CLOSE_PAREN))
 

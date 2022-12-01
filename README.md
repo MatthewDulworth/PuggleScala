@@ -24,3 +24,19 @@ binary      -> expression operator expression ;
 operator    -> "==" | "!=" | "<" | "<=" | ">" | ">="
              | "+"  | "-"  | "*" | "/" ;
 ```
+
+# Usage
+
+```
+val x = 3;          // constant 
+var y = "hello";    // variable 
+
+if (x != y) {       // if statement
+    y = "hi;
+};
+
+var i = 0;
+while(i < 7) {
+
+};
+```

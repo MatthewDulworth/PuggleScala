@@ -65,8 +65,10 @@ case object ASSIGN extends Operator
 // Arithmetic Operators
 case object MINUS extends BinaryOp with UnaryOp
 case object PLUS extends BinaryOp
-case object MULTIPLY extends BinaryOp
-case object DIVIDE extends BinaryOp
+
+sealed trait Factor extends BinaryOp
+case object MULTIPLY extends Factor
+case object DIVIDE extends Factor
 
 // Logical Operators
 case object NOT extends UnaryOp

@@ -1,12 +1,18 @@
 package puggle
 
 sealed trait Expr
-case class Binary(operator: Token, left: Expr, right: Expr) extends Expr
 
+// ----- Binary ----- //
+case class Binary(operator: Token, left: Expr, right: Expr) extends Expr
+case object Binary extends Expr:
+  def apply (operator: Token,
+             left: Option[Expr],
+             right: Option[Expr]): Option[Expr] = (left, right) match
+    case (Some(l), Some(r)) => Some(Binary(operator, l, r))
+    case _ => None
 
 // ----- Unary ----- //
 case class Unary (operator: Token, right: Expr) extends Expr
-
 case object Unary extends Expr:
   def apply (operator: Token, right: Option[Expr]): Option[Unary] = right match
     case Some(e) => Some(Unary(operator, e))
@@ -14,7 +20,6 @@ case object Unary extends Expr:
 
 // ----- Grouping ----- //
 case class Grouping (expression: Expr) extends Expr
-
 case object Grouping extends Expr:
   def apply(expr: Option[Expr]): Option[Grouping] = expr match
     case Some(e) => Some(Grouping(e))

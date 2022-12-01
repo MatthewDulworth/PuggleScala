@@ -68,6 +68,13 @@ class ParserTest extends AnyFunSuite {
       MissingExpectedToken(CLOSE_PAREN) :: Nil)
   }
 
+  test("Grouping: nested parens") {
+    testParser(
+      OPEN_PAREN :: OPEN_PAREN :: OPEN_PAREN :: FALSE :: CLOSE_PAREN :: CLOSE_PAREN :: CLOSE_PAREN :: EOF :: Nil,
+      Some(Grouping(Grouping(Grouping(Literal(FALSE)))))
+    )
+  }
+
   ignore("Grouping: Missing expression") {
     //TODO: Make this work (needs error synchronization)
     testError(
@@ -104,6 +111,37 @@ class ParserTest extends AnyFunSuite {
     testParser(
       NOT :: EOF :: Nil,
       None,
+    )
+  }
+
+  // ----------------------------------------
+  // Test Factor
+  // ----------------------------------------
+  test("Factor: simple multiplication") {
+    testParser(
+      NUMBER(3) :: MULTIPLY :: NUMBER(2) :: EOF :: Nil,
+      Some(Binary(MULTIPLY, Literal(NUMBER(3)), Literal(NUMBER(2))))
+    )
+  }
+
+  test("Factor: simple division") {
+    testParser(
+      STRING("2") :: DIVIDE :: FALSE :: EOF :: Nil,
+      Some(Binary(DIVIDE, Literal(STRING("2")), Literal(FALSE)))
+    )
+  }
+
+  test("Factor: chained factors") {
+    testParser(
+      STRING("2") :: DIVIDE :: FALSE :: MULTIPLY :: TRUE :: EOF :: Nil,
+      Some(Binary(MULTIPLY, Binary(DIVIDE, Literal(STRING("2")), Literal(FALSE)), Literal(TRUE)))
+    )
+  }
+
+  test("Factor: parens") {
+    testParser(
+      OPEN_PAREN :: NUMBER(-1) :: CLOSE_PAREN :: MULTIPLY :: OPEN_PAREN :: NUMBER(45) :: CLOSE_PAREN :: EOF :: Nil,
+      Some(Binary(MULTIPLY, Grouping(Literal(NUMBER(-1))), Grouping(Literal(NUMBER(45)))))
     )
   }
 }
