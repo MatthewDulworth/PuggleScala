@@ -23,24 +23,17 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return equality → comparison ( ( "!=" | "==" ) comparison )*
    */
-  private def equality(): Expr =
-    var expr = comparison()
-    while (tokens.matches(EQUAL, NOT_EQUAL)) {
-      val operator = tokens.peek
-      val right = comparison()
-      expr = Binary(operator, expr, right)
-    }
-    expr
+  private def equality(): Option[Expr] = ???
 
   /**
    * @return comparison → term ( ( ">" | ">=" | "<" | "<=" ) term )*
    */
-  private def comparison(): Expr = ???
+  private def comparison(): Option[Expr] = ???
 
   /**
    * @return term → factor ( ( "-" | "+" ) factor )*
    */
-  private def term(): Expr = ???
+  private def term(): Option[Expr] = ???
 
   /**
    * @return factor → unary ( ( "/" | "*" ) unary )*
@@ -52,7 +45,6 @@ private case class Parser(tokens: TokenList) {
   private def _factor(expr: Option[Expr]): Option[Expr] = tokens.next() match
     case t: Factor => _factor(Binary(t, expr, unary(tokens.next())))
     case _ => expr
-
 
   /**
    * @return unary → ( "!" | "-" ) unary | primary
@@ -89,8 +81,4 @@ private case class Parser(tokens: TokenList) {
   private def parseError(error: ParserError): Option[Expr] =
     Error.report(error)
     None
-
-//  private def syncParseError(error: ParserError): Option[Expr] =
-//    while (ne)
-//    parseError(error)
 }
