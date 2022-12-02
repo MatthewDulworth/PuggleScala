@@ -35,9 +35,8 @@ private case class Parser(tokens: TokenList) {
    */
   private def term(token: Token): Option[Expr] = _term(factor(token))
 
-  @tailrec
-  private def _term(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
-    case t: Arithmetic => _term(Binary(tokens.next(), expr, factor(tokens.next())))
+  @tailrec private def _term(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+    case _: Arithmetic => _term(Binary(tokens.next(), expr, factor(tokens.next())))
     case _ => expr
 
   /**
@@ -45,9 +44,8 @@ private case class Parser(tokens: TokenList) {
    */
   private def factor(token: Token): Option[Expr] = _factor(unary(token))
 
-  @tailrec
-  private def _factor(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
-    case t: Factor => _factor(Binary(tokens.next(), expr, unary(tokens.next())))
+  @tailrec private def _factor(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+    case _: Factor => _factor(Binary(tokens.next(), expr, unary(tokens.next())))
     case _ => expr
 
   /**

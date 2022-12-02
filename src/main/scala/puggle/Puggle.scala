@@ -42,8 +42,7 @@ object Puggle {
   /**
    * Runs the puggle REPL.
    */
-  @tailrec
-  private def runREPL(): Unit =
+  @tailrec private def runREPL(): Unit =
     print("> ")
     readLine() match
       case line: String if line != EXIT_CMD =>

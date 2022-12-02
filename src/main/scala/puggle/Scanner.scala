@@ -17,8 +17,7 @@ class Scanner(src: String) {
   /**
    * @return List of tokens generate by source
    */
-  @tailrec
-  private def getTokens(list: List[Token] = Nil): List[Token] = {
+  @tailrec private def getTokens(list: List[Token] = Nil): List[Token] = {
     val token = nextToken()
     val result = token :: list
     if (token != EOF) getTokens(result) else result

@@ -21,8 +21,7 @@ class TokenList(private val _tokens: List[Token]) {
     cursor += 1
     peek
 
-  @tailrec
-  final def matches(matchables: Token*): Boolean = matchables match
+  @tailrec final def matches(matchables: Token*): Boolean = matchables match
     case m if m.isEmpty => false
     case m if m.head == peek => true
     case _ => matches(matchables.tail: _*)
