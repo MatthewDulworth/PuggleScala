@@ -18,7 +18,7 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return expression → equality
    */
-  private def expression(token: Token): Option[Expr] = factor(token)
+  private def expression(token: Token): Option[Expr] = term(token)
 
   /**
    * @return equality → comparison ( ( "!=" | "==" ) comparison )*
@@ -33,17 +33,21 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return term → factor ( ( "-" | "+" ) factor )*
    */
-  private def term(): Option[Expr] = ???
+  private def term(token: Token): Option[Expr] = _term(factor(token))
+
+  @tailrec
+  private def _term(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+    case t: Arithmetic => _term(Binary(tokens.next(), expr, factor(tokens.next())))
+    case _ => expr
 
   /**
    * @return factor → unary ( ( "/" | "*" ) unary )*
    */
-  private def factor(token: Token): Option[Expr] =
-    _factor(unary(token))
+  private def factor(token: Token): Option[Expr] = _factor(unary(token))
 
   @tailrec
-  private def _factor(expr: Option[Expr]): Option[Expr] = tokens.next() match
-    case t: Factor => _factor(Binary(t, expr, unary(tokens.next())))
+  private def _factor(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+    case t: Factor => _factor(Binary(tokens.next(), expr, unary(tokens.next())))
     case _ => expr
 
   /**
@@ -69,7 +73,7 @@ private case class Parser(tokens: TokenList) {
    */
   private def grouping(): Option[Expr] =
     val expr = expression(tokens.next())
-    tokens.peek match
+    tokens.next() match
       case CLOSE_PAREN => Grouping(expr)
       case _ => parseError(MissingExpectedToken(CLOSE_PAREN))
 

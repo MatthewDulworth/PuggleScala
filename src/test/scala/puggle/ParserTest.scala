@@ -144,4 +144,55 @@ class ParserTest extends AnyFunSuite {
       Some(Binary(MULTIPLY, Grouping(Literal(NUMBER(-1))), Grouping(Literal(NUMBER(45)))))
     )
   }
+
+
+  // ----------------------------------------
+  // Test Term
+  // ----------------------------------------
+  test("Term: simple addition") {
+    testParser(
+      NUMBER(3) :: PLUS :: NUMBER(2) :: EOF :: Nil,
+      Some(Binary(PLUS, Literal(NUMBER(3)), Literal(NUMBER(2))))
+    )
+  }
+
+  test("Term: simple subtraction") {
+    testParser(
+      STRING("2") :: MINUS :: FALSE :: EOF :: Nil,
+      Some(Binary(MINUS, Literal(STRING("2")), Literal(FALSE)))
+    )
+  }
+
+  test("Term: chained terms") {
+    testParser(
+      STRING("2") :: MINUS :: FALSE :: PLUS :: TRUE :: EOF :: Nil,
+      Some(Binary(PLUS, Binary(MINUS, Literal(STRING("2")), Literal(FALSE)), Literal(TRUE)))
+    )
+  }
+
+  test("Term: parens") {
+    testParser(
+      OPEN_PAREN :: NUMBER(-1) :: CLOSE_PAREN :: PLUS :: OPEN_PAREN :: NUMBER(45) :: CLOSE_PAREN :: EOF :: Nil,
+      Some(Binary(PLUS, Grouping(Literal(NUMBER(-1))), Grouping(Literal(NUMBER(45)))))
+    )
+  }
+
+  test("Term: terms with factors") {
+    testParser(
+      NUMBER(-1) :: MULTIPLY :: NUMBER(2) :: MINUS :: NUMBER(45) :: EOF :: Nil,
+      Some(
+        Binary(MINUS, Binary(MULTIPLY, Literal(NUMBER(-1)), Literal(NUMBER(2))), Literal(NUMBER(45))))
+    )
+  }
+
+  test("Term: terms with factors 2") {
+    testParser(
+      NUMBER(-1) :: MINUS :: NUMBER(2) :: MULTIPLY :: NUMBER(45) :: EOF :: Nil,
+      Some(Binary(MINUS,
+        Literal(NUMBER(-1)),
+        Binary(MULTIPLY,
+          Literal(NUMBER(2)),
+          Literal(NUMBER(45)) )))
+    )
+  }
 }

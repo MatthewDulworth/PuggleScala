@@ -62,9 +62,9 @@ sealed trait BinaryOp extends Operator
 case object DOT extends Operator
 case object ASSIGN extends Operator
 
-// Arithmetic Operators
-case object MINUS extends BinaryOp with UnaryOp
-case object PLUS extends BinaryOp
+sealed trait Arithmetic extends BinaryOp
+case object MINUS extends Arithmetic with UnaryOp
+case object PLUS extends Arithmetic
 
 sealed trait Factor extends BinaryOp
 case object MULTIPLY extends Factor
