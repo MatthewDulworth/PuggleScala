@@ -62,19 +62,26 @@ sealed trait BinaryOp extends Operator
 case object DOT extends Operator
 case object ASSIGN extends Operator
 
+case object NOT extends UnaryOp
+
+// Arithmetic Operators
 sealed trait Arithmetic extends BinaryOp
 case object MINUS extends Arithmetic with UnaryOp
 case object PLUS extends Arithmetic
 
+// Factor Operators
 sealed trait Factor extends BinaryOp
 case object MULTIPLY extends Factor
 case object DIVIDE extends Factor
 
-// Logical Operators
-case object NOT extends UnaryOp
-case object NOT_EQUAL extends Operator
-case object GREATER extends Operator
-case object GREATER_EQUAL extends Operator
-case object LESSER extends Operator
-case object LESSER_EQUAL extends Operator
-case object EQUAL extends Operator
+// Comparison Operators
+sealed trait Comparison extends BinaryOp
+case object GREATER extends Comparison
+case object GREATER_EQUAL extends Comparison
+case object LESSER extends Comparison
+case object LESSER_EQUAL extends Comparison
+
+// Equality Operators
+sealed trait Equality extends BinaryOp
+case object NOT_EQUAL extends Equality
+case object EQUAL extends Equality

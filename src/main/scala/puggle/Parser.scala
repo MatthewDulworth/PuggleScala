@@ -18,17 +18,28 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return expression → equality
    */
-  private def expression(token: Token): Option[Expr] = term(token)
+  private def expression(token: Token): Option[Expr] = equality(token)
+
 
   /**
    * @return equality → comparison ( ( "!=" | "==" ) comparison )*
    */
-  private def equality(): Option[Expr] = ???
+  private def equality(token: Token): Option[Expr] = _equality(comparison(token))
+
+  @tailrec private def _equality(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+    case _: Equality => _equality(Binary(tokens.next(), expr, comparison(tokens.next())))
+    case _ => expr
+
 
   /**
    * @return comparison → term ( ( ">" | ">=" | "<" | "<=" ) term )*
    */
-  private def comparison(): Option[Expr] = ???
+  private def comparison(token: Token): Option[Expr] = _comparison(term(token))
+
+  @tailrec private def _comparison(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+    case _: Comparison => _comparison(Binary(tokens.next(), expr, term(tokens.next())))
+    case _ => expr
+
 
   /**
    * @return term → factor ( ( "-" | "+" ) factor )*
@@ -39,6 +50,7 @@ private case class Parser(tokens: TokenList) {
     case _: Arithmetic => _term(Binary(tokens.next(), expr, factor(tokens.next())))
     case _ => expr
 
+
   /**
    * @return factor → unary ( ( "/" | "*" ) unary )*
    */
@@ -48,12 +60,14 @@ private case class Parser(tokens: TokenList) {
     case _: Factor => _factor(Binary(tokens.next(), expr, unary(tokens.next())))
     case _ => expr
 
+
   /**
    * @return unary → ( "!" | "-" ) unary | primary
    */
   private def unary(token: Token): Option[Expr] = token match
     case t: UnaryOp => Unary(t, unary(tokens.next()))
     case _ => primary(token)
+
 
   /**
    * Parses the next token into a primary expression.
@@ -65,6 +79,7 @@ private case class Parser(tokens: TokenList) {
     case EOF => None
     case _ => parseError(UnexpectedToken(token))
 
+
   /**
    * Parses the next token into a grouping.
    * @return grouping → "(" expression ")"
@@ -74,6 +89,7 @@ private case class Parser(tokens: TokenList) {
     tokens.next() match
       case CLOSE_PAREN => Grouping(expr)
       case _ => parseError(MissingExpectedToken(CLOSE_PAREN))
+
 
   /**
    * Reports a parsing error than returns None.

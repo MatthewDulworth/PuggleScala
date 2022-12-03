@@ -195,4 +195,85 @@ class ParserTest extends AnyFunSuite {
           Literal(NUMBER(45)) )))
     )
   }
+
+  // ----------------------------------------
+  // Test Comparison
+  // ----------------------------------------
+  test("Comparison: greater-than") {
+    testParser(
+      TRUE :: GREATER :: FALSE :: EOF :: Nil,
+      Some(Binary(GREATER, Literal(TRUE), Literal(FALSE)))
+    )
+  }
+
+  test("Comparison: less-than") {
+    testParser(
+      TRUE :: LESSER :: FALSE :: EOF :: Nil,
+      Some(Binary(LESSER, Literal(TRUE), Literal(FALSE)))
+    )
+  }
+
+  test("Comparison: greater-than-equal") {
+    testParser(
+      TRUE :: GREATER_EQUAL :: FALSE :: EOF :: Nil,
+      Some(Binary(GREATER_EQUAL, Literal(TRUE), Literal(FALSE)))
+    )
+  }
+
+  test("Comparison: less-than-equal") {
+    testParser(
+      TRUE :: LESSER_EQUAL :: FALSE :: EOF :: Nil,
+      Some(Binary(LESSER_EQUAL, Literal(TRUE), Literal(FALSE)))
+    )
+  }
+
+  test("Comparison: chained comparisons") {
+    testParser(
+      TRUE :: GREATER :: FALSE :: LESSER :: TRUE :: EOF :: Nil,
+      Some(Binary(LESSER, Binary(GREATER, Literal(TRUE), Literal(FALSE)), Literal(TRUE)))
+    )
+  }
+
+  test("Comparison: parens") {
+    testParser(
+      OPEN_PAREN :: OPEN_PAREN :: TRUE :: CLOSE_PAREN :: GREATER
+        :: OPEN_PAREN :: NUMBER(45) :: CLOSE_PAREN :: CLOSE_PAREN :: EOF :: Nil,
+      Some(Grouping(Binary(GREATER, Grouping(Literal(TRUE)), Grouping(Literal(NUMBER(45))))))
+    )
+  }
+
+
+  // ----------------------------------------
+  // Test Equality
+  // ----------------------------------------
+  test("Equality: simple equal") {
+    testParser(
+      TRUE :: EQUAL :: FALSE :: EOF :: Nil,
+      Some(Binary(EQUAL, Literal(TRUE), Literal(FALSE)))
+    )
+  }
+
+  test("Equality: simple not-equal") {
+    testParser(
+      TRUE :: NOT_EQUAL :: FALSE :: EOF :: Nil,
+      Some(Binary(NOT_EQUAL, Literal(TRUE), Literal(FALSE)))
+    )
+  }
+
+  test("Full Expression") {
+    testParser(
+      OPEN_PAREN :: OPEN_PAREN :: TRUE :: GREATER_EQUAL :: STRING("q") :: CLOSE_PAREN :: PLUS
+        :: NUMBER(2) :: CLOSE_PAREN :: MULTIPLY :: FALSE :: EQUAL :: MINUS :: NUMBER(3) :: EOF :: Nil,
+      Some(
+        Binary(EQUAL,
+          Binary(MULTIPLY,
+            Grouping(Binary(PLUS,
+              Grouping(Binary(GREATER_EQUAL,
+                Literal(TRUE),
+                Literal(STRING("q")))),
+              Literal(NUMBER(2)))),
+            Literal(FALSE)),
+          Unary(MINUS, Literal(NUMBER(3)))))
+    )
+  }
 }
