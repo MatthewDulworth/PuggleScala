@@ -19,7 +19,7 @@ case object Unary extends Expr:
     case None => None
 
 // ----- Grouping ----- //
-case class Grouping (expression: Expr) extends Expr
+case class Grouping (expr: Expr) extends Expr
 case object Grouping extends Expr:
   def apply(expr: Option[Expr]): Option[Grouping] = expr match
     case Some(e) => Some(Grouping(e))
