@@ -1,7 +1,7 @@
-# Puggle Grammar v2
+# Grammar
 
 ```
-expression  →  equality
+expression  → equality
 equality    → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison  → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term        → factor ( ( "-" | "+" ) factor )* ;
@@ -12,18 +12,15 @@ primary     → NUMBER | STRING | "true" | "false" | "nil"
 grouping    → "(" expression ")" ;
 ```
 
-
-# Puggle Grammar v1
+# Errors
 
 ```
-expression  -> literal | unary | binary | grouping ;
-literal     -> NUMBER | STRING | "true" | "false" | "nil" ;
-grouping    -> "(" expression ")" ;
-unary       -> ( "-" | "1" ) expression ;
-binary      -> expression operator expression ;
-operator    -> "==" | "!=" | "<" | "<=" | ">" | ">="
-             | "+"  | "-"  | "*" | "/" ;
+error                       → unexpectedTokenError | missingExpectedTokenError | syntaxError
+missingExpectedTokenError   → ( "(" expression expression) | ( "(" expression ";")
+unexpectedTokenError        → ???
+syntaxError                 → ???
 ```
+
 
 # Usage
 

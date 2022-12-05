@@ -11,12 +11,6 @@ class ParserTest extends AnyFunSuite {
     assertResult(out)(res)
     assert(Error.noErrors)
 
-  def testError(in: List[Token], out: Option[Expr], errors: List[Error]): Unit =
-    Error.clear()
-    val res = Parser(in)
-    assertResult(out)(res)
-    assertResult(errors)(Error.log)
-
   // ----------------------------------------
   // Test Primary
   // ----------------------------------------
@@ -54,33 +48,11 @@ class ParserTest extends AnyFunSuite {
     )
   }
 
-  test("Grouping: Missing closing paren") {
-    testError(
-      OPEN_PAREN :: TRUE :: EOF :: Nil,
-      None,
-      MissingExpectedToken(CLOSE_PAREN) :: Nil)
-  }
-
-  test("Grouping: Missing expression and closing paren") {
-    testError(
-      OPEN_PAREN :: EOF :: Nil,
-      None,
-      MissingExpectedToken(CLOSE_PAREN) :: Nil)
-  }
-
   test("Grouping: nested parens") {
     testParser(
       OPEN_PAREN :: OPEN_PAREN :: OPEN_PAREN :: FALSE :: CLOSE_PAREN :: CLOSE_PAREN :: CLOSE_PAREN :: EOF :: Nil,
       Some(Grouping(Grouping(Grouping(Literal(FALSE)))))
     )
-  }
-
-  ignore("Grouping: Missing expression") {
-    //TODO: Make this work (needs error synchronization)
-    testError(
-      OPEN_PAREN :: CLOSE_PAREN :: EOF :: Nil,
-      None,
-      MissingExpectedToken(CLOSE_PAREN) :: Nil)
   }
 
   // ----------------------------------------
@@ -160,6 +132,13 @@ class ParserTest extends AnyFunSuite {
     testParser(
       STRING("2") :: MINUS :: FALSE :: EOF :: Nil,
       Some(Binary(MINUS, Literal(STRING("2")), Literal(FALSE)))
+    )
+  }
+
+  test("Term: subtraction of negative") {
+    testParser(
+      MINUS :: NUMBER(2) :: MINUS :: MINUS :: NUMBER(1) :: EOF :: Nil,
+      Some(Binary(MINUS, Unary(MINUS, Literal(NUMBER(2))), Unary(MINUS, Literal(NUMBER(1)))))
     )
   }
 

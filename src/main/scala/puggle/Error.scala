@@ -38,11 +38,15 @@ case class UnterminatedString(line: Int) extends ScannerError:
 // ----------------------------------------
 sealed trait ParserError extends Error
 
+case class SyntaxError(token: Token) extends ParserError:
+   val line: Int = -1
+   val message: String = s"Syntax Error at \"$token\""
+
 case class MissingExpectedToken(token: Token) extends ParserError:
-   //TODO: Figure out how to get this info 
+   //TODO: Figure out how to get this info
    val line: Int = -1
    val message: String = s"Missing expected token \"$token\""
-   
+
 case class UnexpectedToken(token: Token) extends ParserError:
    //TODO: Figure out how to get this info 
    val line: Int = -1
