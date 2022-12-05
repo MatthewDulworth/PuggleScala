@@ -58,7 +58,11 @@ object Puggle {
    * @param src Source code to run.
    */
   private def run(src: String): Unit =
-    println("Scanning...")
+    println("Tokens =>")
     val tokens = Scanner(src).scan()
     println(tokens)
+
+    val ast = Parser(tokens)
+    println("AST =>")
+    if ast.isDefined then println(ast.get) else println("None")
 }
