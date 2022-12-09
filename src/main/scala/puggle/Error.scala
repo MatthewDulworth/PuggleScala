@@ -51,4 +51,14 @@ case class UnexpectedToken(token: Token) extends ParserError:
    //TODO: Figure out how to get this info 
    val line: Int = -1
    val message: String = s"Unexpected token \"$token\""
-   
+
+
+// ----------------------------------------
+// Interpreter Error
+// ----------------------------------------
+sealed trait RuntimeError extends Error:
+   val line: Int = -1
+   val message: String = s"$this"
+
+case object InvalidOperand extends RuntimeError
+case object MissingOperand extends RuntimeError
