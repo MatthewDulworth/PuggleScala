@@ -1,6 +1,7 @@
 package puggle
 
 import org.scalatest.funsuite.AnyFunSuite
+import puggle.Data.{AND, CLASS, CLOSE_BRACE, CLOSE_PAREN, COMMA, DOT, ELSE, EOF, EQUAL, FALSE, FOR, FUNC, IDENTIFIER, IF, Keyword, MINUS, MULTIPLY, NULL, NUMBER, OPEN_BRACE, OPEN_PAREN, OR, PLUS, PRINT, SEMICOLON, STRING, THIS, TRUE, Token, VAL, VAR, WHILE}
 
 class ScannerTest extends AnyFunSuite {
   test("Empty input -> no tokens") {

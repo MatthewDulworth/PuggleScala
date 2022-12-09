@@ -1,9 +1,11 @@
 package puggle
 
+import puggle.Data.{Binary, BoolVal, DIVIDE, EQUAL, Empty, Expr, GREATER, GREATER_EQUAL, Grouping, LESSER, LESSER_EQUAL, Literal, MINUS, MULTIPLY, NOT, NumberVal, PLUS, StringVal, Typed, Unary, Value}
+
 import scala.annotation.tailrec
 
 object Interpreter {
-  def interpret(expr: Expr): Value = expr match
+  @tailrec def interpret(expr: Expr): Value = expr match
     case l: Literal   => Typed(l.token, l.value)
     case Grouping(e)  => interpret(e)
     // unary operators
@@ -72,15 +74,15 @@ object Interpreter {
   def is_greater(left: Value, right: Value): Value = (left, right) match
     case (NumberVal(l), NumberVal(r)) => BoolVal(l > r)
     case _ => err(InvalidOperand)
-    
+
   def is_lesser(left: Value, right: Value): Value = (left, right) match
     case (NumberVal(l), NumberVal(r)) => BoolVal(l < r)
     case _ => err(InvalidOperand)
-  
+
   def is_greater_equal(left: Value, right: Value): Value = (left, right) match
     case (NumberVal(l), NumberVal(r)) => BoolVal(l >= r)
     case _ => err(InvalidOperand)
-    
+
   def is_lesser_equal(left: Value, right: Value): Value = (left, right) match
     case (NumberVal(l), NumberVal(r)) => BoolVal(l <= r)
     case _ => err(InvalidOperand)

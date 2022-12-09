@@ -1,5 +1,6 @@
 package puggle
 
+import puggle.Data.{AND, CLASS, ELSE, FALSE, FOR, FUNC, IF, NULL, OR, PRINT, THIS, TRUE, VAL, VAR, WHILE}
 import tools.BiMap
 
 val keywords = new BiMap(

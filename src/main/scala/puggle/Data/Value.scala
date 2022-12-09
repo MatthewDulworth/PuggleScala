@@ -1,4 +1,7 @@
-package puggle
+package puggle.Data
+
+import puggle.*
+import puggle.Data.{FALSE, LiteralToken, NUMBER, STRING, TRUE}
 
 
 sealed trait Value

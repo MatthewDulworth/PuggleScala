@@ -2,6 +2,7 @@ package puggle
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
+import puggle.Data.{Binary, CLOSE_PAREN, DIVIDE, EOF, EQUAL, Expr, FALSE, GREATER, GREATER_EQUAL, Grouping, LESSER, LESSER_EQUAL, Literal, MINUS, MULTIPLY, NOT, NOT_EQUAL, NULL, NUMBER, OPEN_PAREN, PLUS, STRING, TRUE, Token, Unary}
 
 class ParserTest extends AnyFunSuite {
 

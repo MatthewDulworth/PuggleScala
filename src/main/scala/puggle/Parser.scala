@@ -1,5 +1,7 @@
 package puggle
 
+import puggle.Data.{Arithmetic, Binary, CLOSE_PAREN, Comparison, EOF, Equality, Expr, Factor, Grouping, Literal, LiteralToken, OPEN_PAREN, Token, TokenList, Unary, UnaryOp}
+
 import scala.annotation.tailrec
 
 case object Parser {

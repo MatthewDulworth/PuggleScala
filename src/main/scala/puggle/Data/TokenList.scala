@@ -1,4 +1,6 @@
-package puggle
+package puggle.Data
+
+import puggle.Data.{EOF, Token}
 
 import scala.annotation.tailrec
 
