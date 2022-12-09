@@ -1,17 +1,18 @@
-package puggle
+package puggle.logic
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
-
-import puggle.data.tokens.*
 import puggle.data.expressions.*
+import puggle.data.tokens.*
+import puggle.logic
+import puggle.logic.{MissingExpectedToken, Parser, UnexpectedToken}
 
 class ParserErrorTest extends AnyFunSuite {
-  def testError(in: List[Token], out: Option[Expr], errors: List[Error]): Unit =
-    Error.clear()
+  def testError(in: List[Token], out: Option[Expr], errors: List[logic.Error]): Unit =
+    logic.Error.clear()
     val res = Parser(in)
     assertResult(out)(res)
-    assertResult(errors)(Error.log)
+    assertResult(errors)(logic.Error.log)
 
 
   test("(") {

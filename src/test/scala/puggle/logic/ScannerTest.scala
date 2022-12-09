@@ -1,8 +1,9 @@
-package puggle
+package puggle.logic
 
 import org.scalatest.funsuite.AnyFunSuite
-import puggle.data.tokens.*
 import puggle.data.keywords
+import puggle.data.tokens.*
+import puggle.logic
 
 class ScannerTest extends AnyFunSuite {
   test("Empty input -> no tokens") {
@@ -103,9 +104,9 @@ class ScannerTest extends AnyFunSuite {
   // ----------------------------------------
   // Helpers
   // ----------------------------------------
-  def testErrors(expected: Error*): Unit = {
-    assertResult(expected.toList.toString()){Error.toString}
-    Error.clear()
+  def testErrors(expected: logic.Error*): Unit = {
+    assertResult(expected.toList.toString()){logic.Error.toString}
+    logic.Error.clear()
   }
 
   def testScanner(in: String, exp: List[Token]): Unit = {

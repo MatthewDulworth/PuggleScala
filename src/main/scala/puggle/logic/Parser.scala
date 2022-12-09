@@ -1,8 +1,10 @@
-package puggle
+package puggle.logic
 
-import puggle.data.tokens.*
+import puggle.data
 import puggle.data.expressions.*
+import puggle.data.tokens.*
 import puggle.data.TokenList
+
 import scala.annotation.tailrec
 
 case object Parser {

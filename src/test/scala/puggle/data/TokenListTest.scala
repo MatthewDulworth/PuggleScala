@@ -1,8 +1,7 @@
-package puggle
+package puggle.data
 
 import org.scalatest.funsuite.AnyFunSuite
 import puggle.data.tokens.*
-import puggle.data.TokenList
 
 class TokenListTest extends AnyFunSuite {
 

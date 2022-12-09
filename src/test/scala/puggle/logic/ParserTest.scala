@@ -1,18 +1,20 @@
-package puggle
+package puggle.logic
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
-import puggle.data.tokens.*
 import puggle.data.expressions.*
+import puggle.data.tokens.*
 import puggle.data.values.*
+import puggle.logic
+import puggle.logic.Parser
 
 class ParserTest extends AnyFunSuite {
 
   def testParser(in: List[Token], out: Option[Expr]): Unit =
-    Error.clear()
+    logic.Error.clear()
     val res = Parser(in)
     assertResult(out)(res)
-    assert(Error.noErrors)
+    assert(logic.Error.noErrors)
 
   // ----------------------------------------
   // Test Primary

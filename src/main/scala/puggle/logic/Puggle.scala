@@ -1,4 +1,6 @@
-package puggle
+package puggle.logic
+
+import puggle.{data, logic}
 
 import scala.annotation.tailrec
 import scala.io.Source
@@ -16,6 +18,7 @@ object Puggle {
 
   /**
    * Usage: `puggle [script]` to run a puggle script or `puggle` to run the puggle REPL.
+   *
    * @param args Path to script or nothing.
    */
   def main(args: Array[String]): Unit =
@@ -31,6 +34,7 @@ object Puggle {
 
   /**
    * Runs a puggle script.
+   *
    * @param path Path to the script.
    */
   private def runFile(path: String): Unit =
@@ -47,7 +51,7 @@ object Puggle {
     readLine() match
       case line: String if line != EXIT_CMD =>
         run(line)
-        Error.clear()
+        logic.Error.clear()
         runREPL()
       case _ => println("Exiting REPL")
 
@@ -55,6 +59,7 @@ object Puggle {
   /**
    * Runs a string of puggle source code.
    * Handles Errors
+   *
    * @param src Source code to run.
    */
   private def run(src: String): Unit =

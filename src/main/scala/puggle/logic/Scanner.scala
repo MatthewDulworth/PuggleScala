@@ -1,9 +1,11 @@
-package puggle
+package puggle.logic
+
+import puggle.{data, logic}
+import puggle.data.tokens.*
+import puggle.data.keywords
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import puggle.data.tokens.*
-import puggle.data.keywords
 
 class Scanner(src: String) {
 
@@ -116,7 +118,7 @@ class Scanner(src: String) {
 
     // Check for unterminated string
     if cursor == src.length then
-      Error.report(UnterminatedString(begin_line))
+      logic.Error.report(UnterminatedString(begin_line))
 
     STRING(src.substring(begin + 1, cursor))
 

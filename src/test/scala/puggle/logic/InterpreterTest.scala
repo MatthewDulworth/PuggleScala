@@ -1,18 +1,19 @@
-package puggle
+package puggle.logic
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
-
-import puggle.data.tokens.*
 import puggle.data.expressions.*
+import puggle.data.tokens.*
 import puggle.data.values.*
+import puggle.logic
+import puggle.logic.Interpreter
 
 class InterpreterTest extends AnyFunSuite {
   def testIntrp(input: Expr, expect: Value): Assertion =
-    Error.clear()
+    logic.Error.clear()
     val res = Interpreter.interpret(input)
     assertResult(expect)(res)
-    assert(Error.noErrors)
+    assert(logic.Error.noErrors)
 
   test("Negation") {
     testIntrp(
