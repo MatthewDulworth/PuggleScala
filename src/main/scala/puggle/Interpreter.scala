@@ -69,8 +69,19 @@ object Interpreter {
   // logical
   def equals(left: Value, right: Value): Value = BoolVal(left == right)
 
-  def is_greater(left: Value, right: Value): Value = ???
-  def is_lesser(left: Value, right: Value): Value = ???
-  def is_greater_equal(left: Value, right: Value): Value = ???
-  def is_lesser_equal(left: Value, right: Value): Value = ???
+  def is_greater(left: Value, right: Value): Value = (left, right) match
+    case (NumberVal(l), NumberVal(r)) => BoolVal(l > r)
+    case _ => err(InvalidOperand)
+    
+  def is_lesser(left: Value, right: Value): Value = (left, right) match
+    case (NumberVal(l), NumberVal(r)) => BoolVal(l < r)
+    case _ => err(InvalidOperand)
+  
+  def is_greater_equal(left: Value, right: Value): Value = (left, right) match
+    case (NumberVal(l), NumberVal(r)) => BoolVal(l >= r)
+    case _ => err(InvalidOperand)
+    
+  def is_lesser_equal(left: Value, right: Value): Value = (left, right) match
+    case (NumberVal(l), NumberVal(r)) => BoolVal(l <= r)
+    case _ => err(InvalidOperand)
 }
