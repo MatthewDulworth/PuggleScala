@@ -1,7 +1,6 @@
 package puggle
 
-import puggle.Data.Token
-
+import puggle.data.tokens.*
 import Console.{RED, RESET}
 import scala.collection.mutable.ListBuffer
 

@@ -2,7 +2,9 @@ package puggle
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
-import puggle.Data.{CLOSE_PAREN, EOF, Expr, MINUS, OPEN_PAREN, STRING, TRUE, Token}
+
+import puggle.data.tokens.*
+import puggle.data.expressions.*
 
 class ParserErrorTest extends AnyFunSuite {
   def testError(in: List[Token], out: Option[Expr], errors: List[Error]): Unit =

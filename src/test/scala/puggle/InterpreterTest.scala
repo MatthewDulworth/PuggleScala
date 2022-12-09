@@ -2,7 +2,10 @@ package puggle
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
-import puggle.Data.{Binary, BoolVal, DIVIDE, EQUAL, Expr, GREATER, GREATER_EQUAL, LESSER, LESSER_EQUAL, Literal, MINUS, MULTIPLY, NOT, NUMBER, NumberVal, PLUS, TRUE, Unary, Value}
+
+import puggle.data.tokens.*
+import puggle.data.expressions.*
+import puggle.data.values.*
 
 class InterpreterTest extends AnyFunSuite {
   def testIntrp(input: Expr, expect: Value): Assertion =

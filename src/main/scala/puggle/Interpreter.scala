@@ -1,7 +1,8 @@
 package puggle
 
-import puggle.Data.{Binary, BoolVal, DIVIDE, EQUAL, Empty, Expr, GREATER, GREATER_EQUAL, Grouping, LESSER, LESSER_EQUAL, Literal, MINUS, MULTIPLY, NOT, NumberVal, PLUS, StringVal, Typed, Unary, Value}
-
+import puggle.data.tokens.*
+import puggle.data.expressions.*
+import puggle.data.values.*
 import scala.annotation.tailrec
 
 object Interpreter {

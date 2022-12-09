@@ -1,7 +1,6 @@
-package puggle.Data
+package puggle.data
 
-import puggle.Data.{EOF, Token}
-
+import tokens.*
 import scala.annotation.tailrec
 
 class TokenList(private val _tokens: List[Token]) {

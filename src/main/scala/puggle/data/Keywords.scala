@@ -1,7 +1,6 @@
-package puggle
+package puggle.data
 
-import puggle.Data.{AND, CLASS, ELSE, FALSE, FOR, FUNC, IF, NULL, OR, PRINT, THIS, TRUE, VAL, VAR, WHILE}
-import tools.BiMap
+import puggle.data.tokens.*
 
 val keywords = new BiMap(
   "and" -> AND,

@@ -1,7 +1,8 @@
 package puggle
 
 import org.scalatest.funsuite.AnyFunSuite
-import puggle.Data.{CLOSE_PAREN, DOT, EOF, FALSE, IF, OPEN_PAREN, TRUE, Token}
+import puggle.data.tokens.*
+import puggle.data.TokenList
 
 class TokenListTest extends AnyFunSuite {
 

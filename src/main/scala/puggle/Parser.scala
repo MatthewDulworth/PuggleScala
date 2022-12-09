@@ -1,7 +1,8 @@
 package puggle
 
-import puggle.Data.{Arithmetic, Binary, CLOSE_PAREN, Comparison, EOF, Equality, Expr, Factor, Grouping, Literal, LiteralToken, OPEN_PAREN, Token, TokenList, Unary, UnaryOp}
-
+import puggle.data.tokens.*
+import puggle.data.expressions.*
+import puggle.data.TokenList
 import scala.annotation.tailrec
 
 case object Parser {

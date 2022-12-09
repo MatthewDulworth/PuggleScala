@@ -1,9 +1,9 @@
 package puggle
 
-import puggle.Data.{ASSIGN, CLOSE_BRACE, CLOSE_PAREN, COMMA, DIVIDE, DOT, EOF, EQUAL, GREATER, GREATER_EQUAL, IDENTIFIER, Id, LESSER, LESSER_EQUAL, MINUS, MULTIPLY, NOT, NOT_EQUAL, NUMBER, OPEN_BRACE, OPEN_PAREN, PLUS, SEMICOLON, STRING, Token}
-
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
+import puggle.data.tokens.*
+import puggle.data.keywords
 
 class Scanner(src: String) {
 

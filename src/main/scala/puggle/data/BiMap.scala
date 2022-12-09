@@ -1,4 +1,4 @@
-package tools
+package puggle.data
 
 /**
  * Adapted from https://stackoverflow.com/a/9851520/9396808
