@@ -2,8 +2,7 @@ package puggle.logic
 
 import org.scalatest.funsuite.AnyFunSuite
 import puggle.data.keywords
-import puggle.data.tokens.*
-import puggle.logic
+import puggle.data.Tokens.*
 
 class ScannerTest extends AnyFunSuite {
   test("Empty input -> no tokens") {
@@ -11,8 +10,8 @@ class ScannerTest extends AnyFunSuite {
   }
 
   test("Single Character Tokens") {
-    testScanner("(){}.,;+-*", OPEN_PAREN :: CLOSE_PAREN :: OPEN_BRACE :: CLOSE_BRACE :: DOT ::
-      COMMA :: SEMICOLON :: PLUS :: MINUS :: MULTIPLY :: Nil)
+    testScanner("(){},;+-*", OPEN_PAREN :: CLOSE_PAREN :: OPEN_BRACE :: CLOSE_BRACE ::
+      COMMA :: SEMICOLON :: PLUS :: MINUS :: STAR :: Nil)
   }
 
   // ----------------------------------------
@@ -68,27 +67,23 @@ class ScannerTest extends AnyFunSuite {
     testScanner("123.45\n6789", NUMBER(123.45) :: NUMBER(6789) :: Nil)
   }
 
-  test("Multiple decimals") {
-    testScanner("1.2.3", NUMBER(1.2) :: DOT :: NUMBER(3) :: Nil)
-  }
-
   test("Multiline number with literal extra decimals") {
-    testScanner("123.45\n67.89.10", NUMBER(123.45) :: NUMBER(67.89) ::
-      DOT :: NUMBER(10) :: Nil)
+    testScanner("123.45\n67.89+10", NUMBER(123.45) :: NUMBER(67.89) ::
+      PLUS :: NUMBER(10) :: Nil)
   }
 
   // ----------------------------------------
   // Identifiers
   // ----------------------------------------
   test("Keywords") {
-    testScanner("and or if else for while class func this true false nil val var print",
-      AND :: OR :: IF :: ELSE :: FOR :: WHILE :: CLASS :: FUNC :: THIS :: TRUE ::
-        FALSE :: NULL :: VAL :: VAR :: PRINT:: Nil)
+    testScanner("and or if else while func true false val var print",
+      AND :: OR :: IF :: ELSE :: WHILE :: FUNC :: TRUE ::
+        FALSE :: VAL :: VAR :: PRINT:: Nil)
   }
 
   test("User Identifiers") {
-    testScanner("a.b f45",
-      IDENTIFIER("a") :: DOT :: IDENTIFIER("b") :: IDENTIFIER("f45") :: Nil)
+    testScanner("a*b f45",
+      IDENTIFIER("a") :: STAR :: IDENTIFIER("b") :: IDENTIFIER("f45") :: Nil)
   }
 
   test("If statement") {
@@ -104,13 +99,13 @@ class ScannerTest extends AnyFunSuite {
   // ----------------------------------------
   // Helpers
   // ----------------------------------------
-  def testErrors(expected: logic.Error*): Unit = {
-    assertResult(expected.toList.toString()){logic.Error.toString}
-    logic.Error.clear()
+  def testErrors(expected: Error*): Unit = {
+    assertResult(expected.toList.toString()){Error.toString}
+    Error.clear()
   }
 
-  def testScanner(in: String, exp: List[Token]): Unit = {
-    val tokens = Scanner(in).scan()
+  def testScanner(in: String, exp: List[Lexeme]): Unit = {
+    val tokens = Scanner(in).scan().map(token => token.lexeme)
     val expected = EOF :: exp.reverse
     assertResult(expected.reverse){tokens}
   }

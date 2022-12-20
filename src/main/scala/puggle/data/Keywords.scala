@@ -1,20 +1,16 @@
 package puggle.data
 
-import puggle.data.tokens.*
+import puggle.data.Tokens.*
 
 val keywords = new BiMap(
+  "true" -> TRUE,
+  "false" -> FALSE,
   "and" -> AND,
   "or" -> OR,
   "if" -> IF,
   "else" -> ELSE,
-  "for" -> FOR,
   "while" -> WHILE,
-  "class" -> CLASS,
   "func" -> FUNC,
-  "this" -> THIS,
-  "true" -> TRUE,
-  "false" -> FALSE,
-  "nil" -> NULL,
   "val" -> VAL,
   "var" -> VAR,
   "print" -> PRINT,

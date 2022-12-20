@@ -1,6 +1,6 @@
 package puggle.logic
 
-import puggle.data.tokens.*
+import puggle.data.Tokens.*
 import scala.Console.{RED, RESET}
 import scala.collection.mutable.ListBuffer
 
@@ -43,14 +43,12 @@ case class SyntaxError(token: Token) extends ParserError:
    val line: Int = -1
    val message: String = s"Syntax Error at \"$token\""
 
-case class MissingExpectedToken(token: Token) extends ParserError:
-   //TODO: Figure out how to get this info
-   val line: Int = -1
-   val message: String = s"Missing expected token \"$token\""
+case class MissingExpectedToken(missing_lexeme: Lexeme, err_at: Token) extends ParserError:
+   val line: Int = err_at.line
+   val message: String = s"Missing expected token \"$missing_lexeme\""
 
 case class UnexpectedToken(token: Token) extends ParserError:
-   //TODO: Figure out how to get this info
-   val line: Int = -1
+   val line: Int = token.line
    val message: String = s"Unexpected token \"$token\""
 
 

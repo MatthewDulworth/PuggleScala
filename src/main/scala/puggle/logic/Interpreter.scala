@@ -1,15 +1,14 @@
 package puggle.logic
 
 import puggle.data
-import puggle.data.expressions.*
-import puggle.data.tokens.*
-import puggle.data.values.*
-
+import puggle.data.Expressions.*
+import puggle.data.Tokens.*
+import puggle.data.Values.*
 import scala.annotation.tailrec
 
 object Interpreter {
   @tailrec def interpret(expr: Expr): Value = expr match
-    case l: Literal => Typed(l.token, l.value)
+    case l: Literal => Typed(l.lexeme, l.value)
     case Grouping(e) => interpret(e)
     // unary operators
     case Unary(MINUS, e) => interpret(negate, e)
@@ -17,7 +16,7 @@ object Interpreter {
     // binary operators
     case Binary(PLUS, l, r) => interpret(add, l, r)
     case Binary(MINUS, l, r) => interpret(subtract, l, r)
-    case Binary(MULTIPLY, l, r) => interpret(multiply, l, r)
+    case Binary(STAR, l, r) => interpret(multiply, l, r)
     case Binary(DIVIDE, l, r) => interpret(divide, l, r)
     // logical operators
     case Binary(EQUAL, l, r) => interpret(equals, l, r)

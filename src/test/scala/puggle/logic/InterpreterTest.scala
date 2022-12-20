@@ -2,18 +2,16 @@ package puggle.logic
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
-import puggle.data.expressions.*
-import puggle.data.tokens.*
-import puggle.data.values.*
-import puggle.logic
-import puggle.logic.Interpreter
+import puggle.data.Expressions.*
+import puggle.data.Tokens.*
+import puggle.data.Values.*
 
 class InterpreterTest extends AnyFunSuite {
   def testIntrp(input: Expr, expect: Value): Assertion =
-    logic.Error.clear()
+    Error.clear()
     val res = Interpreter.interpret(input)
     assertResult(expect)(res)
-    assert(logic.Error.noErrors)
+    assert(Error.noErrors)
 
   test("Negation") {
     testIntrp(
@@ -41,7 +39,7 @@ class InterpreterTest extends AnyFunSuite {
 
   test("Multiplication") {
     testIntrp(
-      Binary(MULTIPLY, Literal(NUMBER(1)), Literal(NUMBER(2))),
+      Binary(STAR, Literal(NUMBER(1)), Literal(NUMBER(2))),
       NumberVal(2))
   }
 

@@ -1,8 +1,8 @@
 package puggle.logic
 
 import puggle.data
-import puggle.data.expressions.*
-import puggle.data.tokens.*
+import puggle.data.Expressions.*
+import puggle.data.Tokens.*
 import puggle.data.TokenList
 
 import scala.annotation.tailrec
@@ -10,8 +10,7 @@ import scala.annotation.tailrec
 case object Parser {
   def apply(tokens: List[Token]): Option[Expr] =
     assert(tokens.nonEmpty)
-    assert(tokens.last == EOF)
-
+    assert(tokens.last.lexeme == EOF)
     val list = TokenList(tokens)
     Parser(list).parse()
 }
@@ -31,7 +30,7 @@ private case class Parser(tokens: TokenList) {
    */
   private def equality(token: Token): Option[Expr] = _equality(comparison(token))
 
-  @tailrec private def _equality(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+  @tailrec private def _equality(expr: Option[Expr]): Option[Expr] = tokens.peekNext.lexeme match
     case _: Equality => _equality(Binary(tokens.next(), expr, comparison(tokens.next())))
     case _ => expr
 
@@ -41,7 +40,7 @@ private case class Parser(tokens: TokenList) {
    */
   private def comparison(token: Token): Option[Expr] = _comparison(term(token))
 
-  @tailrec private def _comparison(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+  @tailrec private def _comparison(expr: Option[Expr]): Option[Expr] = tokens.peekNext.lexeme match
     case _: Comparison => _comparison(Binary(tokens.next(), expr, term(tokens.next())))
     case _ => expr
 
@@ -51,7 +50,7 @@ private case class Parser(tokens: TokenList) {
    */
   private def term(token: Token): Option[Expr] = _term(factor(token))
 
-  @tailrec private def _term(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+  @tailrec private def _term(expr: Option[Expr]): Option[Expr] = tokens.peekNext.lexeme match
     case _: Arithmetic => _term(Binary(tokens.next(), expr, factor(tokens.next())))
     case _ => expr
 
@@ -61,7 +60,7 @@ private case class Parser(tokens: TokenList) {
    */
   private def factor(token: Token): Option[Expr] = _factor(unary(token))
 
-  @tailrec private def _factor(expr: Option[Expr]): Option[Expr] = tokens.peekNext match
+  @tailrec private def _factor(expr: Option[Expr]): Option[Expr] = tokens.peekNext.lexeme match
     case _: Factor => _factor(Binary(tokens.next(), expr, unary(tokens.next())))
     case _ => expr
 
@@ -69,8 +68,8 @@ private case class Parser(tokens: TokenList) {
   /**
    * @return unary → ( "!" | "-" ) unary | primary
    */
-  private def unary(token: Token): Option[Expr] = token match
-    case t: UnaryOp => Unary(t, unary(tokens.next()))
+  private def unary(token: Token): Option[Expr] = token.lexeme match
+    case _: UnaryOp => Unary(token, unary(tokens.next()))
     case _ => primary(token)
 
 
@@ -78,8 +77,8 @@ private case class Parser(tokens: TokenList) {
    * Parses the next token into a primary expression.
    * @return primary → NUMBER | STRING | "true" | "false" | "nil" | grouping
    */
-  private def primary(token: Token): Option[Expr] = token match
-    case t: LiteralToken => Some(Literal(t))
+  private def primary(token: Token): Option[Expr] = token.lexeme match
+    case t: LiteralToken => Some(Literal(token))
     case OPEN_PAREN => grouping()
     case EOF => None
     case _ => parseError(UnexpectedToken(token))
@@ -91,9 +90,9 @@ private case class Parser(tokens: TokenList) {
    */
   private def grouping(): Option[Expr] =
     val expr = expression(tokens.next())
-    tokens.next() match
+    tokens.next().lexeme match
       case CLOSE_PAREN => Grouping(expr)
-      case _ => parseError(MissingExpectedToken(CLOSE_PAREN))
+      case _ => parseError(MissingExpectedToken(CLOSE_PAREN, tokens.peek))
 
 
   /**

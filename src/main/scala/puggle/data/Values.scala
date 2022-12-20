@@ -1,8 +1,8 @@
 package puggle.data
 
-import puggle.data.tokens.*
+import puggle.data.Tokens.*
 
-package values:
+object Values:
   sealed trait Value
   
   case object Empty extends Value
@@ -15,7 +15,7 @@ package values:
   case class NumberVal(value: Double) extends Typed
   
   case object Typed:
-    def apply(token: LiteralToken, value: Any): Typed = token match
+    def apply(token: Lexeme, value: Any): Typed = token match
       case TRUE | FALSE => BoolVal(value.asInstanceOf[Boolean])
       case STRING(_) => StringVal(value.asInstanceOf[String])
       case NUMBER(_) => NumberVal(value.asInstanceOf[Double])

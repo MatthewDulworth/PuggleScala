@@ -2,19 +2,17 @@ package puggle.logic
 
 import org.scalatest.compatible.Assertion
 import org.scalatest.funsuite.AnyFunSuite
-import puggle.data.expressions.*
-import puggle.data.tokens.*
-import puggle.data.values.*
-import puggle.logic
-import puggle.logic.Parser
+import puggle.data.Expressions.*
+import puggle.data.Tokens.*
+import puggle.data.Values.*
 
 class ParserTest extends AnyFunSuite {
 
-  def testParser(in: List[Token], out: Option[Expr]): Unit =
-    logic.Error.clear()
-    val res = Parser(in)
+  def testParser(in: List[Lexeme], out: Option[Expr]): Unit =
+    Error.clear()
+    val res = Parser(in.map(lex => Token(lex)))
     assertResult(out)(res)
-    assert(logic.Error.noErrors)
+    assert(Error.noErrors)
 
   // ----------------------------------------
   // Test Primary
@@ -37,10 +35,6 @@ class ParserTest extends AnyFunSuite {
 
   test("Primary: String Literal") {
     testParser(STRING("2") :: EOF :: Nil, Some(Literal(STRING("2"))))
-  }
-
-  test("Primary: Null Literal") {
-    testParser(NULL :: EOF :: Nil, Some(Literal(NULL)))
   }
 
   // ----------------------------------------
@@ -96,8 +90,8 @@ class ParserTest extends AnyFunSuite {
   // ----------------------------------------
   test("Factor: simple multiplication") {
     testParser(
-      NUMBER(3) :: MULTIPLY :: NUMBER(2) :: EOF :: Nil,
-      Some(Binary(MULTIPLY, Literal(NUMBER(3)), Literal(NUMBER(2))))
+      NUMBER(3) :: STAR :: NUMBER(2) :: EOF :: Nil,
+      Some(Binary(STAR, Literal(NUMBER(3)), Literal(NUMBER(2))))
     )
   }
 
@@ -110,15 +104,15 @@ class ParserTest extends AnyFunSuite {
 
   test("Factor: chained factors") {
     testParser(
-      STRING("2") :: DIVIDE :: FALSE :: MULTIPLY :: TRUE :: EOF :: Nil,
-      Some(Binary(MULTIPLY, Binary(DIVIDE, Literal(STRING("2")), Literal(FALSE)), Literal(TRUE)))
+      STRING("2") :: DIVIDE :: FALSE :: STAR :: TRUE :: EOF :: Nil,
+      Some(Binary(STAR, Binary(DIVIDE, Literal(STRING("2")), Literal(FALSE)), Literal(TRUE)))
     )
   }
 
   test("Factor: parens") {
     testParser(
-      OPEN_PAREN :: NUMBER(-1) :: CLOSE_PAREN :: MULTIPLY :: OPEN_PAREN :: NUMBER(45) :: CLOSE_PAREN :: EOF :: Nil,
-      Some(Binary(MULTIPLY, Grouping(Literal(NUMBER(-1))), Grouping(Literal(NUMBER(45)))))
+      OPEN_PAREN :: NUMBER(-1) :: CLOSE_PAREN :: STAR :: OPEN_PAREN :: NUMBER(45) :: CLOSE_PAREN :: EOF :: Nil,
+      Some(Binary(STAR, Grouping(Literal(NUMBER(-1))), Grouping(Literal(NUMBER(45)))))
     )
   }
 
@@ -163,18 +157,18 @@ class ParserTest extends AnyFunSuite {
 
   test("Term: terms with factors") {
     testParser(
-      NUMBER(-1) :: MULTIPLY :: NUMBER(2) :: MINUS :: NUMBER(45) :: EOF :: Nil,
+      NUMBER(-1) :: STAR :: NUMBER(2) :: MINUS :: NUMBER(45) :: EOF :: Nil,
       Some(
-        Binary(MINUS, Binary(MULTIPLY, Literal(NUMBER(-1)), Literal(NUMBER(2))), Literal(NUMBER(45))))
+        Binary(MINUS, Binary(STAR, Literal(NUMBER(-1)), Literal(NUMBER(2))), Literal(NUMBER(45))))
     )
   }
 
   test("Term: terms with factors 2") {
     testParser(
-      NUMBER(-1) :: MINUS :: NUMBER(2) :: MULTIPLY :: NUMBER(45) :: EOF :: Nil,
+      NUMBER(-1) :: MINUS :: NUMBER(2) :: STAR :: NUMBER(45) :: EOF :: Nil,
       Some(Binary(MINUS,
         Literal(NUMBER(-1)),
-        Binary(MULTIPLY,
+        Binary(STAR,
           Literal(NUMBER(2)),
           Literal(NUMBER(45)) )))
     )
@@ -247,10 +241,10 @@ class ParserTest extends AnyFunSuite {
   test("Full Expression") {
     testParser(
       OPEN_PAREN :: OPEN_PAREN :: TRUE :: GREATER_EQUAL :: STRING("q") :: CLOSE_PAREN :: PLUS
-        :: NUMBER(2) :: CLOSE_PAREN :: MULTIPLY :: FALSE :: EQUAL :: MINUS :: NUMBER(3) :: EOF :: Nil,
+        :: NUMBER(2) :: CLOSE_PAREN :: STAR :: FALSE :: EQUAL :: MINUS :: NUMBER(3) :: EOF :: Nil,
       Some(
         Binary(EQUAL,
-          Binary(MULTIPLY,
+          Binary(STAR,
             Grouping(Binary(PLUS,
               Grouping(Binary(GREATER_EQUAL,
                 Literal(TRUE),
