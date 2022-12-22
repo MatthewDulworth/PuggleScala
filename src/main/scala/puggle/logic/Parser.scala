@@ -8,11 +8,19 @@ import puggle.data.TokenList
 import scala.annotation.tailrec
 
 case object Parser {
-  def apply(tokens: List[Token]): Option[Expr] =
+  def apply(tokens: List[Token], log: Boolean = false): Option[Expr] =
+    
+    // Check that the list of tokens isn't empty and ends with EOF.
     assert(tokens.nonEmpty)
     assert(tokens.last.lexeme == EOF)
+    
+    // Parse the tokens into an AST
     val list = TokenList(tokens)
-    Parser(list).parse()
+    val ast = Parser(list).parse()
+    
+    // Log list if necessary
+    if log then println(ast)
+    ast
 }
 
 

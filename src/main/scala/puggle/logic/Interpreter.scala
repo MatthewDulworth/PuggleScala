@@ -7,7 +7,12 @@ import puggle.data.Values.*
 import scala.annotation.tailrec
 
 object Interpreter {
-  @tailrec def interpret(expr: Expr): Value = expr match
+
+  def apply (expr: Option[Expr]): Value = expr match
+    case Some(e) => interpret(e)
+    case None => Empty
+
+  @tailrec private def interpret(expr: Expr): Value = expr match
     case l: Literal => Typed(l.lexeme, l.value)
     case Grouping(e) => interpret(e)
     // unary operators

@@ -3,7 +3,11 @@ package puggle.data
 object Tokens:
   val NO_LINE: Int = -100
   
-  case class Token(lexeme: Lexeme, line: Int = NO_LINE)
+  case class Token(lexeme: Lexeme, line: Int = NO_LINE):
+    override def toString: String =
+      val lineStr = if line == NO_LINE then "NO_LINE" else s"$line"
+      s"Token($lexeme, $lineStr"
+
   case object Token:
     def unapply(token: Token): Option[Lexeme] = Some(token.lexeme)
     def lexemesToTokens(lexemes: List[Lexeme]): List[Token] = lexemes.map(lexeme => Token(lexeme))

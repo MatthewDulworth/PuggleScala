@@ -9,7 +9,7 @@ import puggle.data.Values.*
 class InterpreterTest extends AnyFunSuite {
   def testIntrp(input: Expr, expect: Value): Assertion =
     Error.clear()
-    val res = Interpreter.interpret(input)
+    val res = Interpreter(Some(input))
     assertResult(expect)(res)
     assert(Error.noErrors)
 

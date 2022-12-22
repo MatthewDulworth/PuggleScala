@@ -1,7 +1,6 @@
 package puggle.logic
 
-import puggle.{data, logic}
-
+import puggle.data.Expressions.*
 import scala.annotation.tailrec
 import scala.io.Source
 import scala.io.StdIn.readLine
@@ -51,7 +50,7 @@ object Puggle {
     readLine() match
       case line: String if line != EXIT_CMD =>
         run(line)
-        logic.Error.clear()
+        Error.clear()
         runREPL()
       case _ => println("Exiting REPL")
 
@@ -63,11 +62,14 @@ object Puggle {
    * @param src Source code to run.
    */
   private def run(src: String): Unit =
-    println("Tokens =>")
-    val tokens = Scanner(src).scan()
-    println(tokens)
+    val LOG = true
+    // Parse into an AST
+    val ast = Parser(Scanner(src, LOG), LOG)
 
-    val ast = Parser(tokens)
-    println("AST =>")
-    if ast.isDefined then println(ast.get) else println("None")
+    // Interpret the AST if there are no errors.
+    if Error.noErrors then
+      val intrp = Interpreter(ast)
+      if Error.noErrors then println(intrp)
+
+    println(Error.log)
 }

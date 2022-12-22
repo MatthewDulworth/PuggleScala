@@ -4,7 +4,15 @@ import puggle.data.Tokens.*
 import puggle.data.keywords
 import scala.annotation.tailrec
 
-class Scanner(src: String) {
+
+case object Scanner {
+  def apply(src: String, log: Boolean): List[Token] =
+    val tokens = Scanner(src).scan()
+    if log then println(tokens)
+    tokens
+}
+
+private case class Scanner(src: String) {
 
   private var cursor = -1
   private var line = 0

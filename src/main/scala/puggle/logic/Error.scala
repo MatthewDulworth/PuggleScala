@@ -40,7 +40,7 @@ case class UnterminatedString(line: Int) extends ScannerError:
 sealed trait ParserError extends Error
 
 case class SyntaxError(token: Token) extends ParserError:
-   val line: Int = -1
+   val line: Int = token.line
    val message: String = s"Syntax Error at \"$token\""
 
 case class MissingExpectedToken(missing_lexeme: Lexeme, err_at: Token) extends ParserError:
@@ -56,7 +56,7 @@ case class UnexpectedToken(token: Token) extends ParserError:
 // Interpreter Error
 // ----------------------------------------
 sealed trait RuntimeError extends Error:
-   val line: Int = -1
+   val line: Int = NO_LINE
    val message: String = s"$this"
 
 case object InvalidOperand extends RuntimeError
